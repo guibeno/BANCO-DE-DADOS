@@ -1,0 +1,3 @@
+A chave primária é o dado que você precisa para controle do acesso às linhas da tabelas. Ela deve ser única e por isso não pode ter valor nulo (teoricamente poderia ter uma chave nula, mas não faz muito sentido). Ela dá a identidade para a linha, é por ela que você pode confiar que sempre será usada para acesso direto à linha desejada. É comum que seja usado um identificador numérico sequencial para isso. Veja mais em Surrogate Key e Natural Key.
+
+A chave estrangeira é usada para relacionamento com outra tabela. Em boa parte dos casos ela será a chave primária de outra tabela. Por isso pode ser nula (não tem relacionamento) ou duplicata (mais de um item em uma tabela se relaciona com o mesmo item de outra tabela).
