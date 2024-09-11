@@ -1,0 +1,7 @@
+CREATE TABLE produtos
+(
+    quantidade INT,
+    validade DATE,
+    nome VARCHAR(30),
+    codigo INT PRIMARY KEY
+)
