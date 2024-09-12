@@ -1,0 +1,50 @@
+CREATE TABLE cadastro
+(
+    cpf VARCHAR(11) PRIMARY KEY,
+    rg VARCHAR(10) NOT NULL UNIQUE,
+    nome_sobrenome VARCHAR(50) NOT NULL,
+    endereco VARCHAR(50) NOT NULL
+);
+INSERT INTO cadastro(cpf,rg,nome_sobrenome,endereco) VALUES('01742067042','41222748','Guilherme Dalmoro','Rua dos andradas 717');
+
+
+CREATE TABLE sala(
+    codigo INTEGER PRIMARY KEY AUTOINCREMENT,
+    turno VARCHAR(1),
+    nome INT,
+    UNIQUE(nome,turno)
+);
+INSERT INTO sala (codigo,turno,nome) VALUES ('1234','noite','guilherme');
+INSERT INTO sala (codigo,turno,nome) VALUES ('9876','tarde','livia');
+INSERT INTO sala (codigo,turno,nome) VALUES ('1264','noite','lucas');
+INSERT INTO sala (codigo,turno,nome) VALUES ('1237','tarde','isa');
+INSERT INTO sala (codigo,turno,nome) VALUES ('1309','noite','laucir');
+
+
+
+CREATE TABLE disciplina(
+    capacidade INT,
+    nome PRIMARY KEY,
+    idsala INT REFERENCES sala
+);
+INSERT INTO disciplina (capacidade,idsala,nome) VALUES (9876,5,'guilherme');
+INSERT INTO disciplina (capacidade,idsala,nome) VALUES (9333,9,'joao');
+INSERT INTO disciplina (capacidade,idsala,nome) VALUES (1111,8,'felipe');
+INSERT INTO disciplina (capacidade,idsala,nome) VALUES (2222,7,'rose');
+INSERT INTO disciplina (capacidade,idsala,nome) VALUES (4444,6,'bela');
+
+CREATE TABLE produto(
+    codigo INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(100) NOT NULL UNIQUE,
+    preco FLOAT CHECK(preco>=1),
+    quantidade INTEGER
+);
+
+INSERT INTO produto (codigo,nome,preco,quantidade) VALUES ('9999','leonardo',3.99,'200');
+INSERT INTO produto (codigo,nome,preco,quantidade) VALUES ('8888','leandro',9.99,'300');
+INSERT INTO produto (codigo,nome,preco,quantidade) VALUES ('7777','leo',8,'400');
+INSERT INTO produto (codigo,nome,preco,quantidade) VALUES ('6666','leon',7.50,'500');
+INSERT INTO produto (codigo,nome,preco,quantidade) VALUES ('5555','lisa',5.77,'600');
+
+
+DROP TABLE cadastro
