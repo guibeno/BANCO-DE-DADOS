@@ -1,0 +1,33 @@
+CREATE TABLE pessoa(
+    codigo INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(50) NOT NULL,
+    sobrenome VARCHAR(50) NOT NULL,
+    ativo DEFAULT 1,
+    email VARCHAR(200) UNIQUE,
+    genero VARCHAR(20),
+    cidade VARCHAR(50),
+    pais VARCHAR(2),
+    salario FLOAT CHECK (salario >= 0)
+);
+
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (11,'joao','silva','0','joao@gmail.com','masculino','porto alegre','br',1560);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (12,'joa','silv','2','joa@gmail.com','masculin','porto alegr','br',156);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (13,'lucas','leiva','1','lucasleiva@gmail.com','masculino','sao paulo','br',156.90);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (10,'mario','goes','0','mario@gmail.com','masculino','novo hamburgo','br',244.99);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (14,'joana','dalia','9','joana@gmail.com','feminino','cachoeirinha','br',300.56);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (15,'luis','soares','9','luis@gmail.com','masculino','porto alegre','br',2.000000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (16,'andres','dalessandro','2','dalessandro@gmail.com','masculino','buenos aires','ar',900.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (66,'rafael','borre','2','borre@gmail.com','masculino','buenos aires','ar',1.500000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (20,'paolo','guerrero','1','guerrero@gmail.com','masculino','cordoba','pr',800.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (19,'diego','forlam','1','forlam@gmail.com','masculino','montevideo','ur',800.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (18,'palo','gurrero','0','gurrero@gmail.com','masculino','cordoba','pr',800.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (21,'alan','patrick','1','alan@gmail.com','masculino','rio de janeiro','br',1.200000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (22,'gabriel','mercado','1','mercado@gmail.com','masculino','buenos aires','ar',600.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (23,'gabriel','barbosa','0','gabigol@gmail.com','masculino','sao paulo','br',2.000000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (24,'enner','valencia','1','valencia@gmail.com','masculino','poria','eq',1.600000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (25,'lucas','alario','1','alario@gmail.com','masculino','buenos aires','ar',800.000);
+
+DELETE FROM pessoa WHERE codigo % 2 = 1;
+
+ALTER TABLE pessoa DROP COLUMN sobrenome;
+
