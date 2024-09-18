@@ -1,0 +1,40 @@
+CREATE TABLE cadastro_pf_pj(
+    id_cadastro PRIMARY KEY,
+    nome VARCHAR (50),
+    telefone INTEGER,
+    endereco VARCHAR(100),
+    cpf INTEGER(10) UNIQUE,
+    cnpj INTEGER(14) UNIQUE
+);
+
+CREATE TABLE produtos(
+    id_produtos PRIMARY KEY,
+    nome VARCHAR(100),
+    armazenado VARCHAR(50),
+    quantidade INTEGER,
+    valor FLOAT
+);
+
+CREATE TABLE vendas
+(
+    id_vendas PRIMARY KEY,
+    data        DATE,
+    id_produto  INT,
+    id_cliente  INT,
+    quantidade  INT,
+    valor_final FLOAT,
+    FOREIGN KEY (id_produto) REFERENCES produtos (id_produtos),
+    FOREIGN KEY (id_cliente) REFERENCES cadastro_pf_pj (id_cadastro)
+);
+
+INSERT INTO cadastro_pf_pj (nome, telefone, endereco, cpf) VALUES
+('João Silva', '1234-5678', 'Rua A, 123', '123.456.789-09'),
+('Maria Oliveira', '9876-5432', 'Avenida B, 456', '987.654.321-00');
+
+INSERT INTO produtos (nome, armazenado, quantidade, valor) VALUES
+('lapis', 'Prateleira 1', 100, 10.00),
+('borracha', 'Prateleira 2', 50, 20.00);
+
+INSERT INTO vendas (data, id_produto, id_cliente, quantidade, valor_final) VALUES
+('18/09/24', 1, 1, 2, 20.00),
+('17/09/24', 2, 2, 1, 
