@@ -1,0 +1,34 @@
+CREATE TABLE funcionario(
+    nome VARCHAR(50) NOT NULL PRIMARY KEY,
+    cargo VARCHAR(50) NOT NULL,
+    equipe VARCHAR(50)
+);
+
+
+CREATE TABLE realizacao(
+       emprestimos INT,
+       financeiro INT,
+       ano_fiscal INT,
+       seguro INT,
+       conta_abertas INT,
+       idrealizacao VARCHAR(100),
+       FOREIGN KEY (idrealizacao) REFERENCES funcionario(nome)
+);
+
+
+CREATE TABLE metas(
+      emprestimos INT,
+      financeiro INT,
+      ano_fiscal INT,
+      seguro INT,
+      conta_abertas INT,
+      idmetas VARCHAR(100),
+      FOREIGN KEY (idmetas) REFERENCES funcionario(nome)
+);
+
+CREATE TABLE avaliacao_gestor(
+    nome PRIMARY KEY,
+    equipe VARCHAR(100),
+    id_avaliacao_gestor INT,
+    FOREIGN KEY (id_avaliacao_gestor) REFERENCES metas(idmetas)
+);
