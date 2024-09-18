@@ -1,0 +1,82 @@
+CREATE TABLE categorias(
+    nome VARCHAR(70),
+    idnome INTEGER PRIMARY KEY
+);
+
+
+CREATE TABLE cadastro_produtos(
+    quantidade INTEGER,
+    preco FLOAT,
+    nome VARCHAR (70),
+    codigo INTEGER PRIMARY KEY,
+    id_categoria INTEGER,
+    FOREIGN KEY (id_categoria) REFERENCES categorias(idnome)
+);
+
+CREATE TABLE cadastro_cliente(
+    email TEXT PRIMARY KEY,
+    endereco_obrigatorio TEXT NOT NULL,
+    endereco_opcional TEXT
+);
+
+CREATE TABLE venda (
+    idvenda INTEGER PRIMARY KEY,
+    lista_produtos VARCHAR(70),
+    data DATE,
+    valor_total FLOAT,
+    status VARCHAR(10),
+    idprodutos INTEGER,
+    id_cliente TEXT,
+    FOREIGN KEY (idprodutos) REFERENCES cadastro_produtos(codigo),
+    FOREIGN KEY (id_cliente) REFERENCES cadastro_cliente(email)
+);
+
+CREATE TABLE cadastro_funcionario(
+    matricula INTEGER PRIMARY KEY,
+    nome VARCHAR(70)
+);
+
+CREATE TABLE inspetor(
+    nome VARHCAR(70),
+    matricula INTEGER PRIMARY KEY
+);
+
+CREATE TABLE analise_final(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_venda INTEGER,
+    id_funcionario INTEGER,
+    id_inspetor INTEGER,
+    verificado INTEGER DEFAULT 0,
+    valor_total FLOAT,
+    id_cadastroproduto INTEGER,
+    FOREIGN KEY (id_venda) REFERENCES venda(idvenda),
+    FOREIGN KEY (id_funcionario) REFERENCES cadastro_funcionario(matricula),
+    FOREIGN KEY (id_inspetor) REFERENCES inspetor(matricula)
+);
+
+ALTER TABLE cadastro_produtos
+ADD COLUMN descricao TEXT;
+
+ALTER TABLE cadastro_cliente
+ADD COLUMN telefone INTEGER;
+
+ALTER TABLE analise_final
+ADD COLUMN quantidade INTEGER;
+
+INSERT INTO cadastro_produtos (codigo, nome, descricao, preco, quantidade)
+VALUES (1, 'Smartphone', 'Smartphone com 128GB', 1999.99, 50);
+
+INSERT INTO cadastro_produtos (codigo, nome, descricao, preco, quantidade)
+VALUES (2, 'Fone de Ouvido', 'Fone de ouvido sem fio', 299.99, 100);
+
+INSERT INTO cadastro_cliente (email,  endereco_obrigatorio, endereco_opcional, telefone)
+VALUES ('cliente@example.com', 'Rua A, 123', 'Apt 4', '123456789');
+
+INSERT INTO cadastro_funcionario (matricula, nome)
+VALUES (1001, 'Maria Oliveira');
+
+INSERT INTO venda (id_cliente, data, valor_total, status)
+VALUES ('cliente@example.com', '2024-09-18', 2299.98, 'Separação');
+
+INSERT INTO analise_final (id_venda, quantidade, valor_total, verificado)
+VALUES (1, 1, 1999.99, 0);
