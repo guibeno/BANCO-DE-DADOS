@@ -1,0 +1,32 @@
+CREATE TABLE participantes(
+    logradouro VARCHAR(70),
+    pais VARCHAR (30),
+    estado VARCHAR(40),
+    nome TEXT,
+    id_participantes PRIMARY KEY
+);
+
+CREATE TABLE perguntas(
+    pergunta TEXT PRIMARY KEY,
+    FOREIGN KEY (pergunta) REFERENCES participantes(id_participantes)
+);
+
+CREATE TABLE resposta(
+    resposta TEXT,
+    id_pergunta TEXT,
+    id_participante TEXT,
+    FOREIGN KEY (id_pergunta) REFERENCES perguntas(pergunta),
+    FOREIGN KEY (id_participante) REFERENCES participantes(id_participantes)
+);
+
+
+INSERT INTO participantes (logradouro, pais, estado, nome) VALUES
+('Rua A', 'Brasil', 'São Paulo', 'João Silva'),
+('Avenida B', 'Brasil', 'Rio de Janeiro', 'Maria Oliveira'),
+('Travessa C', 'Portugal', 'Lisboa', 'Carlos Pereira');
+
+INSERT INTO perguntas(pergunta) VALUES
+('Quantos graus está hoje');
+
+INSERT INTO resposta(resposta) VALUES
+('Esta 25 graus')
