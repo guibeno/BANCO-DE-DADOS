@@ -9,7 +9,8 @@ CREATE TABLE funcionario(
 CREATE TABLE gestor(
     id_gestor PRIMARY KEY,
     nome VARCHAR(80),
-    cargo VARCHAR(20)
+    cargo VARCHAR(20),
+    FOREIGN KEY (gestor) REFERENCES atingimento(nota_final)
 );
 
 CREATE TABLE meta(
