@@ -1,0 +1,38 @@
+CREATE TABLE categoria (
+    id_categoria PRIMARY KEY,
+    nome VARCHAR(100) UNIQUE
+);
+
+CREATE TABLE eventos (
+    id_evento PRIMARY KEY,
+    data DATE,
+    local VARCHAR(200),
+    descricao TEXT
+);
+
+CREATE TABLE usuarios (
+    id_usuario PRIMARY KEY,
+    nome VARCHAR(80),
+    logradouro VARCHAR(100),
+    estado VARCHAR(20),
+    pais VARCHAR(20),
+    categorias_interesse TEXT
+);
+
+CREATE TABLE eventos_categorias (
+    id_evento INTEGER,
+    id_categoria INTEGER,
+    PRIMARY KEY (id_evento, id_categoria),
+    FOREIGN KEY (id_evento) REFERENCES eventos(id_evento),
+    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+);
+
+CREATE TABLE mensagens (
+    id_mensagem PRIMARY KEY,
+    id_remetente INTEGER,
+    id_destinatario INTEGER,
+    conteudo TEXT,
+    data_envio DATE,
+    FOREIGN KEY (id_remetente) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_destinatario) REFERENCES usuarios(id_usuario)
+);
