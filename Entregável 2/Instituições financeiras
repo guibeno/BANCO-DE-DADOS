@@ -1,34 +1,29 @@
 CREATE TABLE funcionario(
-    nome VARCHAR(50) NOT NULL PRIMARY KEY,
-    cargo VARCHAR(50) NOT NULL,
-    equipe VARCHAR(50)
+    id_funcionario PRIMARY KEY,
+    nome VARCHAR(80),
+    cargo VARCHAR(20),
+    data_admissao DATE,
+    FOREIGN KEY (id_funcionario) REFERENCES gestor(id_gestor)
 );
 
-
-CREATE TABLE realizacao(
-       emprestimos INT,
-       financeiro INT,
-       ano_fiscal INT,
-       seguro INT,
-       conta_abertas INT,
-       idrealizacao VARCHAR(100),
-       FOREIGN KEY (idrealizacao) REFERENCES funcionario(nome)
+CREATE TABLE gestor(
+    id_gestor PRIMARY KEY,
+    nome VARCHAR(80),
+    cargo VARCHAR(20)
 );
 
-
-CREATE TABLE metas(
-      emprestimos INT,
-      financeiro INT,
-      ano_fiscal INT,
-      seguro INT,
-      conta_abertas INT,
-      idmetas VARCHAR(100),
-      FOREIGN KEY (idmetas) REFERENCES funcionario(nome)
+CREATE TABLE meta(
+    id_meta PRIMARY KEY,
+    tipo VARCHAR(80),
+    qtd_prevista INTEGER,
+    data_cadastro DATE,
+    FOREIGN KEY (id_meta) REFERENCES funcionario(id_funcionario)
 );
 
-CREATE TABLE avaliacao_gestor(
-    nome PRIMARY KEY,
-    equipe VARCHAR(100),
-    id_avaliacao_gestor INT,
-    FOREIGN KEY (id_avaliacao_gestor) REFERENCES metas(idmetas)
-);
+CREATE TABLE atingimento(
+    id_atingimento PRIMARY KEY,
+    qtd_atingida INTEGER,
+    data_registro DATE,
+    nota_final FLOAT,
+    FOREIGN KEY (id_atingimento) REFERENCES meta(id_meta)
+)
