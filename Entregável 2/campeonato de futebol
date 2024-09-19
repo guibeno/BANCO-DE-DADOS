@@ -1,0 +1,36 @@
+CREATE TABLE cadastro_jogadores(
+    id_jogadores PRIMARY KEY,
+    nome VARCHAR(50),
+    posicao VARCHAR(20),
+    data_nascimento INTEGER,
+    FOREIGN KEY (id_jogadores) REFERENCES cadastro_equipes(id_equipe)
+
+);
+
+CREATE TABLE cadastro_equipes(
+    id_equipe PRIMARY KEY,
+    nome VARCHAR(40),
+    info_desportiva TEXT,
+    info_esportiva TEXT
+);
+
+CREATE TABLE partidas(
+    turno VARCHAR(15),
+    data DATE,
+    local VARCHAR(80),
+    id_equipe_casa INTEGER,
+    id_equipe_visitante INTEGER,
+    FOREIGN KEY (id_equipe_casa) REFERENCES cadastro_equipes(id_equipe),
+    FOREIGN KEY (id_equipe_visitante) REFERENCES cadastro_equipes(id_equipe)
+);
+
+CREATE TABLE jogadores_partidas(
+    id_jogadores_partidas PRIMARY KEY,
+    id_partida INTEGER,
+    id_jogador INTEGER,
+    gols INTEGER DEFAULT 0,
+    cartoes INTEGER DEFAULT 0,
+    FOREIGN KEY (id_jogador) REFERENCES cadastro_jogadores(id_jogadores),
+    FOREIGN KEY (id_partida) REFERENCES cadastro_equipes(id_equipe),
+    UNIQUE(id_jogador,id_partida)
+)
