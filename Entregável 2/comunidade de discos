@@ -1,0 +1,40 @@
+CREATE TABLE albuns(
+    id_album PRIMARY KEY,
+    titulo VARCHAR(70),
+    cantor VARCHAR(30),
+    data_lançamentos DATE
+);
+
+CREATE TABLE turnes(
+    id_turne PRIMARY KEY,
+    artista VARCHAR(70),
+    inicio DATE,
+    fim DATE,
+    localizacao VARCHAR(200)
+);
+
+CREATE TABLE avaliacao (
+    id_avaliacao PRIMARY KEY,
+    id_albuns INTEGER,
+    id_turne INTEGER,
+    avaliacao INT CHECK (avaliacao> 0 AND avaliacao<=5),
+    comentario TEXT,
+    FOREIGN KEY (id_albuns) REFERENCES albuns(id_album),
+    FOREIGN KEY (id_turne) REFERENCES turnes (id_turne)
+);
+
+ALTER TABLE albuns ADD COLUMN 'tipo' VARCHAR(10);
+
+INSERT INTO albuns (titulo, cantor, tipo, data_lançamentos) VALUES
+('Album rock', 'Banda metalica', 'CD', 2020),
+('Album sertejo', 'Banda henrique e juliano', 'Vinil', 1995);
+
+
+
+INSERT INTO turnes (artista, inicio, fim, localizacao) VALUES
+('Banda rock', '02/02/2004', '13/09/2004', 'São Paulo'),
+('Banda sertanejo', '02/02/2004', '14/04/2002', 'Rio de Janeiro');
+
+INSERT INTO avaliacao (id_albuns, id_turne, avaliacao, comentario) VALUES
+(1, NULL, 5, 'Excelente álbum, um dos melhores que existe!'),
+(NULL, 1 , 4, 'Show incrível, a energia estava da banda é demais!');
