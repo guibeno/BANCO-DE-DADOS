@@ -1,0 +1,156 @@
+
+CREATE TABLE aluno
+(
+	cpf VARCHAR(14) PRIMARY KEY,
+	matricula VARCHAR(15) NOT NULL UNIQUE,
+	nome VARCHAR(50) NOT NULL UNIQUE
+);
+CREATE TABLE disciplina
+(
+	nome VARCHAR(50) PRIMARY KEY
+);
+CREATE TABLE estuda
+(
+    id_aluno VARCHAR(14) ,
+    id_disciplina VARCHAR(50) ,
+    PRIMARY KEY (id_aluno, id_disciplina),
+    FOREIGN KEY (id_aluno) REFERENCES aluno(cpf),
+    FOREIGN KEY (id_disciplina) REFERENCES disciplina(nome)
+);
+
+CREATE TABLE professor
+(
+    cpf VARCHAR(14) PRIMARY KEY,
+    ctps VARCHAR(30),
+    nome VARCHAR(50)
+);
+CREATE TABLE ministra
+(
+    id_professor VARCHAR(14),
+    id_disciplina VARCHAR(50),
+    PRIMARY KEY (id_professor, id_disciplina),
+    FOREIGN KEY (id_professor) REFERENCES professor(cpf),
+    FOREIGN KEY (id_disciplina) REFERENCES disciplina(nome)
+);
+CREATE TABLE sala_de_aula
+(
+	num_sala VARCHAR(5) PRIMARY KEY,
+	num_alunos  INT CHECK (num_alunos >=0)
+);
+CREATE TABLE aula
+(
+    id_sala_de_aula VARCHAR(5),
+    id_disciplina VARCHAR(50),
+    PRIMARY KEY (id_sala_de_aula, id_disciplina),
+    FOREIGN KEY (id_sala_de_aula) REFERENCES sala_de_aula(num_sala),
+    FOREIGN KEY (id_disciplina) REFERENCES disciplina(nome)
+);
+
+INSERT INTO aluno (cpf, matricula, nome)
+VALUES ('123.456.789-00', '20240001', 'João Silva'),
+       ('987.654.321-00', '20240002', 'Maria Souza'),
+       ('111.222.333-44', '20240003', 'Pedro Oliveira'),
+       ('222.333.444-55', '20240004', 'Lucas Lima'),
+       ('333.444.555-66', '20240005', 'Ana Clara'),
+       ('444.555.666-77', '20240006', 'Paulo Mendes'),
+       ('555.666.777-88', '20240007', 'Bianca Ferreira'),
+       ('666.777.888-99', '20240008', 'Ricardo Alves'),
+       ('777.888.999-00', '20240009', 'Fernanda Martins'),
+       ('888.999.111-22', '20240010', 'Carolina Souza');
+
+INSERT INTO disciplina (nome)
+VALUES ('Matemática'),
+       ('Física'),
+       ('Química'),
+       ('Biologia'),
+       ('História'),
+       ('Geografia'),
+       ('Inglês'),
+       ('Português'),
+       ('Artes'),
+       ('Educação Física');
+
+INSERT INTO estuda (id_aluno, id_disciplina)
+VALUES ('123.456.789-00', 'Matemática'),
+       ('987.654.321-00', 'Física'),
+       ('111.222.333-44', 'Química'),
+       ('222.333.444-55', 'Biologia'),
+       ('333.444.555-66', 'História'),
+       ('444.555.666-77', 'Geografia'),
+       ('555.666.777-88', 'Inglês'),
+       ('666.777.888-99', 'Português'),
+       ('777.888.999-00', 'Artes'),
+       ('888.999.111-22', 'Educação Física');
+
+INSERT INTO professor (cpf, ctps, nome)
+VALUES ('111.222.333-00', '1234567', 'Carlos Lima'),
+       ('444.555.666-00', '7654321', 'Ana Costa'),
+       ('555.666.777-11', '6543210', 'Roberto Souza'),
+       ('666.777.888-22', '0987654', 'Mariana Araujo'),
+       ('777.888.999-33', '8765432', 'Felipe Silva'),
+       ('888.999.111-44', '2345678', 'Camila Rodrigues'),
+       ('999.111.222-55', '3456789', 'Igor Fernandes'),
+       ('000.111.222-66', '4567890', 'Cláudia Pereira'),
+       ('111.222.333-77', '5678901', 'Bruno Costa'),
+       ('222.333.444-88', '6789012', 'Helena Moreira');
+
+INSERT INTO ministra (id_professor, id_disciplina)
+VALUES ('111.222.333-00', 'Matemática'),
+       ('444.555.666-00', 'Física'),
+       ('555.666.777-11', 'Química'),
+       ('666.777.888-22', 'Biologia'),
+       ('777.888.999-33', 'História'),
+       ('888.999.111-44', 'Geografia'),
+       ('999.111.222-55', 'Inglês'),
+       ('000.111.222-66', 'Português'),
+       ('111.222.333-77', 'Artes'),
+       ('222.333.444-88', 'Educação Física');
+
+INSERT INTO sala_de_aula (num_sala, num_alunos)
+VALUES ('101', 30),
+       ('102', 25),
+       ('103', 40),
+       ('104', 35),
+       ('105', 32),
+       ('106', 20),
+       ('107', 28),
+       ('108', 33),
+       ('109', 26),
+       ('110', 29);
+
+INSERT INTO aula (id_sala_de_aula, id_disciplina)
+VALUES ('101', 'Matemática'),
+       ('102', 'Física'),
+       ('103', 'Química'),
+       ('104', 'Biologia'),
+       ('105', 'História'),
+       ('106', 'Geografia'),
+       ('107', 'Inglês'),
+       ('108', 'Português'),
+       ('109', 'Artes'),
+       ('110', 'Educação Física');
+
+INSERT INTO disciplina (capacidade)
+VALUES (50),(30),
+       (40),(30),
+       (17),(60);
+
+ALTER TABLE professor
+    ADD COLUMN salario DECIMAL(10, 2);
+
+UPDATE professor
+SET salario = 1000;
+
+UPDATE professor
+SET salario = salario +300
+WHERE ctps < 5;
+
+UPDATE sala_de_aula
+SET num_alunos = (ABS(RANDOM()) % 21) + 20;
+
+ALTER TABLE disciplina
+ADD COLUMN capacidade INTEGER;
+
+
+DELETE FROM disciplina
+WHERE capacidade BETWEEN 20 AND 40;
