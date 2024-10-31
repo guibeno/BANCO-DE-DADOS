@@ -1,0 +1,261 @@
+CREATE TABLE pessoa
+(
+    codigo    INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome      VARCHAR(50) NOT NULL,
+    sobrenome VARCHAR(50) NOT NULL,
+    ativo     BOLEAN DEFAULT 1,
+    email     VARCHAR(200) UNIQUE,
+    genero    VARCHAR(20),
+    cidade    VARCHAR(50),
+    pais      VARCHAR(2),
+    salario   FLOAT CHECK (salario >= 0)
+);
+
+
+CREATE TABLE pessoa2(
+                       codigo INTEGER PRIMARY KEY AUTOINCREMENT,
+                       nome VARCHAR(50) NOT NULL,
+                       sobrenome VARCHAR(50) NOT NULL,
+                       ativo BOLEAN DEFAULT 1,
+                       email VARCHAR(200) UNIQUE,
+                       genero VARCHAR(20),
+                       cidade VARCHAR(50),
+                       pais VARCHAR(2),
+                       salario FLOAT CHECK (salario >= 0),
+                       melhor_amigo INTEGER,
+                       FOREIGN KEY (melhor_amigo) REFERENCES pessoa (codigo)
+);
+
+INSERT INTO pessoa2
+SELECT p.*,NULL
+FROM pessoa p;
+
+DROP TABLE  pessoa;
+ALTER TABLE pessoa2 RENAME TO pessoa;
+
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (11,'joao','silva','0','joao@gmail.com','masculino','porto alegre','br',1560);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (12,'joa','silv','2','joa@gmail.com','masculin','porto alegr','br',156);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (13,'lucas','leiva','1','lucasleiva@gmail.com','masculino','sao paulo','br',156.90);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (10,'mario','goes','0','mario@gmail.com','masculino','novo hamburgo','br',244.99);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (14,'joana','dalia','9','joana@gmail.com','feminino','cachoeirinha','br',300.56);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (15,'luis','soares','9','luis@gmail.com','masculino','porto alegre','br',2.000000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (16,'andres','dalessandro','2','dalessandro@gmail.com','masculino','buenos aires','ar',900.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (66,'rafael','borre','2','borre@gmail.com','masculino','buenos aires','ar',1.500000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (20,'paolo','guerrero','1','guerrero@gmail.com','masculino','cordoba','pr',800.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (19,'diego','forlam','1','forlam@gmail.com','masculino','montevideo','ur',800.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (18,'palo','gurrero','0','gurrero@gmail.com','masculino','cordoba','pr',800.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (21,'alan','patrick','1','alan@gmail.com','masculino','rio de janeiro','br',1.200000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (22,'gabriel','mercado','1','mercado@gmail.com','masculino','buenos aires','ar',600.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (23,'gabriel','barbosa','0','gabigol@gmail.com','masculino','sao paulo','br',2.000000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (24,'enner','valencia','1','valencia@gmail.com','masculino','poria','eq',1.600000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (25,'lucas','alario','1','alario@gmail.com','masculino','buenos aires','ar',800.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (26,'lucas','alario','1','alario@atitus.edu.br','masculino','buenos aires','ar',800.000);
+INSERT INTO pessoa(codigo,nome,sobrenome,ativo,email,genero,cidade,pais,salario) VALUES (90,'lucas','alario','1','alario3@atitus.edu.br','masculino','buenos aires','ar',40000);
+
+
+
+SELECT salario
+FROM pessoa
+ORDER BY salario DESC;
+
+SELECT * FROM pessoa
+WHERE salario > 1200;
+
+SELECT * FROM pessoa
+WHERE email LIKE '%atitus.edu.br';
+
+SELECT
+    CASE WHEN genero = 'masculino' THEN 'Genero masculino'
+        WHEN genero = 'feminino' THEN 'Genero feminino'
+END AS genero_extensao
+FROM PESSOA;
+
+SELECT * FROM pessoa
+ORDER BY codigo DESC
+limit 1;
+
+SELECT DISTINCT cidade
+FROM pessoa;
+
+
+SELECT
+    COUNT (*) AS quantidade_masculina
+FROM pessoa
+WHERE genero = 'masculino';
+
+
+SELECT
+    MAX(salario) AS maior_salario,
+    MIN(salario) AS menor_salario
+FROM pessoa;
+
+SELECT
+    COUNT (*) AS total_brasileiros
+FROM pessoa
+WHERE pais = 'br';
+
+SELECT SUM(salario) AS total_folha
+FROM pessoa;
+
+SELECT DISTINCT sobrenome AS sobrenomes_diferentes
+FROM pessoa;
+
+SELECT
+    COUNT (*) AS quantidade_feminino
+FROM pessoa
+WHERE genero = 'feminino';
+
+SELECT genero, AVG(salario) AS salario_medio
+FROM pessoa
+GROUP BY genero;
+
+SELECT genero, MAX(salario) AS max_salario, MIN(salario) AS min_salario
+FROM pessoa
+GROUP BY genero;
+
+SELECT cidade, COUNT(*) AS quantidade_cidade
+FROM pessoa
+GROUP BY cidade
+HAVING COUNT(*) >= 3;
+
+SELECT cidade, COUNT(*) AS salario_cidade
+FROM pessoa
+WHERE salario > 1000
+GROUP BY cidade;
+
+CREATE VIEW view1 AS
+SELECT
+    CASE WHEN genero = 'masculino' THEN 'Genero masculino'
+         WHEN genero = 'feminino' THEN 'Genero feminino'
+        END AS genero_extensao
+FROM PESSOA;
+
+SELECT * FROM view1;
+
+CREATE VIEW view2 AS
+SELECT nome FROM pessoa
+WHERE salario > 1500;
+
+SELECT * FROM view2;
+
+CREATE VIEW view3 AS
+SELECT pais FROM pessoa
+where pais == 'br';
+
+CREATE VIEW view4 AS
+SELECT nome,pais FROM pessoa
+where pais == 'br';
+
+SELECT * FROM view4;
+
+CREATE VIEW view5 AS
+SELECT cidade,COUNT(*) FROM pessoa
+GROUP BY cidade
+HAVING COUNT(*) >= 5;
+
+SELECT * FROM view5;
+
+CREATE VIEW view6 AS
+SELECT cidade,COUNT(*) FROM pessoa
+GROUP BY cidade
+HAVING COUNT(*) >= 3;
+
+SELECT * FROM view6;
+
+CREATE VIEW view7 AS
+SELECT cidade,COUNT(*) FROM pessoa
+GROUP BY cidade
+HAVING COUNT(*) >= 2;
+
+
+SELECT * FROM view7;
+
+DROP VIEW view7;
+
+SELECT cidade FROM pessoa
+WHERE cidade != 'porto alegre';
+
+WITH CidadesImpares AS (
+    SELECT DISTINCT cidade
+    FROM pessoa
+    WHERE codigo % 2 != 0
+),
+     QtdForaCidades AS (
+         SELECT COUNT(*) AS qtd_fora_cidades
+         FROM pessoa
+         WHERE cidade NOT IN (SELECT cidade FROM CidadesImpares)
+     )
+SELECT c.cidade, q.qtd_fora_cidades
+FROM CidadesImpares c, QtdForaCidades q;
+
+
+WITH MediaPorCidade AS (
+    SELECT cidade, COUNT(*) AS total_pessoas
+    FROM pessoa
+    GROUP BY cidade
+)
+SELECT
+    (SELECT AVG(total_pessoas) FROM MediaPorCidade) AS media_por_cidade,
+    (SELECT MIN(total_pessoas) FROM MediaPorCidade) AS min_por_cidade,
+    (SELECT MAX(total_pessoas) FROM MediaPorCidade AS max_por_cidade);
+
+DROP VIEW view1;
+DROP VIEW view2;
+DROP VIEW view3;
+DROP VIEW view4;
+DROP VIEW view6;
+DROP VIEW view5;
+DROP VIEW view7;
+
+SELECT nome, cidade, COUNT(*) AS total
+FROM pessoa
+GROUP BY nome, cidade
+HAVING COUNT() > 1;
+
+
+SELECT
+    CASE
+        WHEN salario > 4000 THEN 'Alto'
+        ELSE 'Baixo'
+        END AS faixa_salarial,
+    COUNT(*) AS total
+FROM pessoa
+GROUP BY faixa_salarial;
+
+WITH capital AS(
+    VALUES ('Rio Branco'),
+                               ('maceió'),
+                               ('macapá'),
+                               ('manaus'),
+                               ('salvador'),
+                               ('Fortaleza'),
+                               ('Brasília'),
+                               ('Vitória'),
+                               ('Goiânia'),
+                               ('São Luís'),
+                               ('Cuiabá'),
+                               ('Campo Grande'),
+                               ('Belo Horizonte'),
+                               ('Belém'),
+                               ('João Pessoa'),
+                               ('Curitiba'),
+                               ('Recife'),
+                               ('Teresina'),
+                               ('Rio de Janeiro'),
+                               ('Natal'),
+                               ('porto alegre'),
+                               ('Porto Velho'),
+                               ('Boa Vista'),
+                               ('Florianópolis'),
+                               ('São Paulo'),
+                               ('Aracaju'),
+                               ('Palmas'))
+SELECT AVG(salario) FROM pessoa
+WHERE pessoa.cidade IN (SELECT * FROM capital);
+
+
+
+
+SELECT AVG(salario)
+FROM pessoa
+
