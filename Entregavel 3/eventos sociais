@@ -1,0 +1,278 @@
+CREATE TABLE categoria (
+    id_categoria INTEGER PRIMARY KEY,
+    nome VARCHAR(100) UNIQUE
+);
+
+CREATE TABLE eventos (
+    id_evento INTEGER PRIMARY KEY,
+    data DATE,
+    local VARCHAR(200),
+    descricao TEXT
+);
+
+CREATE TABLE usuarios (
+    id_usuario INTEGER PRIMARY KEY,
+    nome VARCHAR(80),
+    logradouro VARCHAR(100),
+    estado VARCHAR(20),
+    pais VARCHAR(20),
+    categorias_interesse TEXT
+);
+
+CREATE TABLE eventos_categorias (
+    id_evento INTEGER,
+    id_categoria INTEGER,
+    PRIMARY KEY (id_evento, id_categoria),
+    FOREIGN KEY (id_evento) REFERENCES eventos(id_evento),
+    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+);
+
+CREATE TABLE mensagens (
+    id_mensagem INTEGER PRIMARY KEY,
+    id_remetente INTEGER,
+    id_destinatario INTEGER,
+    conteudo TEXT,
+    data_envio DATE,
+    FOREIGN KEY (id_remetente) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_destinatario) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE usuarios_interesses (
+    id_usuario INTEGER,
+    id_categoria INTEGER,
+    PRIMARY KEY (id_usuario, id_categoria),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+);
+
+
+
+INSERT INTO categoria (nome) VALUES ('Bar');
+INSERT INTO categoria (nome) VALUES ('Show');
+INSERT INTO categoria (nome) VALUES ('Jogo');
+INSERT INTO categoria (nome) VALUES ('Livros');
+INSERT INTO categoria (nome) VALUES ('Cultura');
+
+
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-11-10', 'São Paulo - SP', 'Show de Rock com bandas locais');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-11-15', 'Rio de Janeiro - RJ', 'Noite de Jazz em um bar famoso');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-11-20', 'Curitiba - PR', 'Jogo de Futebol no Estádio Couto Pereira');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-11-22', 'Belo Horizonte - MG', 'Lançamento de livro de autor brasileiro');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-11-25', 'Porto Alegre - RS', 'Exposição de arte no Museu de Arte do Rio Grande do Sul');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-11-30', 'Salvador - BA', 'Encontro de fãs de literatura fantástica');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-12-01', 'Florianópolis - SC', 'Show de música eletrônica');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-12-05', 'Fortaleza - CE', 'Cineclube com exibição de filmes independentes');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-12-10', 'Brasília - DF', 'Jogo de basquete entre times universitários');
+INSERT INTO eventos (data, local, descricao) VALUES ('2024-12-15', 'Recife - PE', 'Encontro de escritores para discutir literatura contemporânea');
+
+
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (1, 2);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (2, 1);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (3, 3);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (4, 4);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (5, 5);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (6, 4);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (7, 2);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (8, 5);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (9, 3);
+INSERT INTO eventos_categorias (id_evento, id_categoria) VALUES (10, 4);
+
+
+INSERT INTO usuarios (nome, logradouro, estado, pais) VALUES
+('João Silva', 'Rua A, 123', 'SP', 'Brasil'),
+('Maria Oliveira', 'Rua B, 456', 'RJ', 'Brasil'),
+('Carlos Souza', 'Rua C, 789', 'PR', 'Brasil'),
+('Ana Costa', 'Rua D, 101', 'MG', 'Brasil'),
+('Felipe Almeida', 'Rua E, 202', 'RS', 'Brasil'),
+('Larissa Santos', 'Rua F, 303', 'BA', 'Brasil'),
+('Roberto Pereira', 'Rua G, 404', 'SC', 'Brasil'),
+('Patrícia Lima', 'Rua H, 505', 'CE', 'Brasil'),
+('Eduardo Rocha', 'Rua I, 606', 'DF', 'Brasil'),
+('Juliana Martins', 'Rua J, 707', 'PE', 'Brasil'),
+('Thiago Gomes', 'Rua K, 808', 'SP', 'Brasil'),
+('Sofia Fernandes', 'Rua L, 909', 'RN', 'Brasil'),
+('Ricardo Pereira', 'Rua M, 1010', 'AM', 'Brasil'),
+('Cláudia Alves', 'Rua N, 1111', 'GO', 'Brasil'),
+('Felipe Costa', 'Rua O, 1212', 'ES', 'Brasil');
+
+
+
+INSERT INTO usuarios_interesses (id_usuario, id_categoria) VALUES
+(1, 1), (1, 2),
+(2, 3), (2, 4),
+(3, 5), (3, 2),
+(4, 1), (4, 3),
+(5, 4), (5, 5),
+(6, 2), (6, 1),
+(7, 3), (7, 4),
+(8, 5), (8, 2),
+(9, 1), (9, 3),
+(10, 4), (10, 5),
+(11, 2), (11, 3),
+(12, 1), (12, 4),
+(13, 3), (13, 2),
+(14, 4), (14, 5),
+(15, 1), (15, 3);
+
+
+INSERT INTO mensagens (id_remetente, id_destinatario, conteudo, data_envio) VALUES
+(1, 2, 'Oi Maria, vou ao show de rock. Vamos juntos?', '2024-11-05'),
+(2, 1, 'Oi João, vou também! Vamos combinar o horário?', '2024-11-05'),
+(3, 4, 'Oi Ana, vou ao encontro de livros. Topa?', '2024-11-05'),
+(4, 3, 'Oi Carlos, vou também! Que horas você vai?', '2024-11-05'),
+(5, 6, 'Oi Larissa, vou para a festa na praia. Vai ser massa!', '2024-11-05'),
+(6, 5, 'Oi Felipe, vou também! Vamos nos encontrar lá?', '2024-11-05');
+INSERT INTO mensagens (id_remetente, id_destinatario, conteudo, data_envio) VALUES
+(6, 5, 'Eu vou', '2024-11-05');
+
+
+
+
+
+SELECT
+    e.id_evento,
+    e.data,
+    e.local,
+    e.descricao,
+    c.nome AS categoria_nome
+FROM
+    eventos e
+JOIN
+    eventos_categorias ec ON e.id_evento = ec.id_evento
+JOIN
+    categoria c ON ec.id_categoria = c.id_categoria
+ORDER BY
+    e.data ASC;
+
+
+SELECT DISTINCT
+    e.id_evento,
+    e.descricao AS evento_nome,
+    e.data,
+    e.local,
+    e.descricao
+FROM
+    eventos e
+JOIN
+    eventos_categorias ec ON e.id_evento = ec.id_evento
+JOIN
+    categoria c ON ec.id_categoria = c.id_categoria
+JOIN
+    usuarios_interesses ui ON c.id_categoria = ui.id_categoria
+JOIN
+    mensagens m ON ui.id_usuario = m.id_remetente
+WHERE
+    m.conteudo LIKE '%Eu vou%'
+ORDER BY
+    e.data ASC;
+
+
+SELECT *
+FROM
+    mensagens m
+WHERE
+    m.conteudo = 'Eu vou';
+
+
+SELECT
+    c.nome AS categoria_nome,
+    COUNT(ui.id_usuario) AS numero_de_usuarios
+FROM
+    categoria c
+JOIN
+    usuarios_interesses ui ON c.id_categoria = ui.id_categoria
+GROUP BY
+    c.id_categoria
+ORDER BY
+    numero_de_usuarios DESC;
+
+
+
+SELECT
+    c.nome AS categoria_nulo
+FROM
+    categoria c
+LEFT JOIN
+    usuarios_interesses ui ON c.id_categoria = ui.id_categoria
+LEFT JOIN
+    eventos_categorias ec ON c.id_categoria = ec.id_categoria
+WHERE
+    ui.id_usuario IS NULL AND ec.id_evento IS NULL;
+
+
+SELECT
+    u1.nome AS autor_mensagem,
+    u2.nome AS destinatario,
+    m.conteudo AS mensagem
+FROM
+    mensagens m
+JOIN
+    usuarios u1 ON m.id_remetente = u1.id_usuario
+JOIN
+    usuarios u2 ON m.id_destinatario = u2.id_usuario
+WHERE
+    m.conteudo LIKE '%Eu vou%' or m.conteudo LIKE '%vou%';
+
+ALTER TABLE usuarios ADD COLUMN idade INTEGER;
+
+UPDATE usuarios
+SET idade = 30
+WHERE id_usuario = 14;
+
+UPDATE usuarios SET idade = 25 WHERE id_usuario = 1;
+UPDATE usuarios SET idade = 30 WHERE id_usuario = 2;
+UPDATE usuarios SET idade = 22 WHERE id_usuario = 3;
+UPDATE usuarios SET idade = 29 WHERE id_usuario = 4;
+UPDATE usuarios SET idade = 35 WHERE id_usuario = 5;
+UPDATE usuarios SET idade = 27 WHERE id_usuario = 6;
+UPDATE usuarios SET idade = 31 WHERE id_usuario = 7;
+UPDATE usuarios SET idade = 24 WHERE id_usuario = 8;
+UPDATE usuarios SET idade = 28 WHERE id_usuario = 9;
+UPDATE usuarios SET idade = 33 WHERE id_usuario = 10;
+UPDATE usuarios SET idade = 26 WHERE id_usuario = 11;
+UPDATE usuarios SET idade = 40 WHERE id_usuario = 12;
+UPDATE usuarios SET idade = 23 WHERE id_usuario = 13;
+UPDATE usuarios SET idade = 32 WHERE id_usuario = 15;
+
+
+SELECT
+    CASE
+        WHEN idade BETWEEN 18 AND 29 THEN 'Jovens Adultos'
+        WHEN idade BETWEEN 30 AND 44 THEN 'Adultos'
+        WHEN idade BETWEEN 45 AND 59 THEN 'Meia-Idade'
+        WHEN idade BETWEEN 60 AND 75 THEN 'Idosos'
+    END AS faixa_etaria,
+    COUNT(*) AS total_usuarios
+FROM usuarios
+GROUP BY faixa_etaria;
+
+
+CREATE TABLE usuarios_novo (
+    id_usuario INTEGER PRIMARY KEY,
+    nome VARCHAR(80),
+    logradouro VARCHAR(100),
+    estado VARCHAR(20),
+    pais VARCHAR(20)
+);
+
+INSERT INTO usuarios_novo (id_usuario, nome, logradouro, estado, pais)
+SELECT id_usuario, nome, logradouro, estado, pais FROM usuarios;
+
+DROP TABLE usuarios;
+
+ALTER TABLE usuarios_novo RENAME TO usuarios;
+
+
+
+SELECT
+    u.nome AS nome_usuario,
+    c.nome AS categoria_interesse
+FROM
+    usuarios u
+JOIN
+    usuarios_interesses ui ON u.id_usuario = ui.id_usuario
+JOIN
+    categoria c ON ui.id_categoria = c.id_categoria
+ORDER BY
+    u.nome, c.nome;
+
