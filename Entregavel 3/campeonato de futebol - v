@@ -1,0 +1,381 @@
+CREATE TABLE cadastro_equipes (
+                                  id_equipe INTEGER PRIMARY KEY,
+                                  nome VARCHAR(40),
+                                  info_desportiva TEXT,
+                                  info_esportiva TEXT
+);
+
+CREATE TABLE cadastro_jogadores (
+                                    id_jogadores INTEGER PRIMARY KEY,
+                                    nome VARCHAR(50),
+                                    posicao VARCHAR(20),
+                                    data_nascimento DATE,
+                                    id_equipe INTEGER,
+                                    FOREIGN KEY (id_equipe) REFERENCES cadastro_equipes(id_equipe)
+);
+
+CREATE TABLE partidas (
+                          id_partida INTEGER PRIMARY KEY AUTOINCREMENT,
+                          turno VARCHAR(15),
+                          data DATE,
+                          local VARCHAR(80),
+                          id_equipe_casa INTEGER,
+                          id_equipe_visitante INTEGER,
+                          FOREIGN KEY (id_equipe_casa) REFERENCES cadastro_equipes(id_equipe),
+                          FOREIGN KEY (id_equipe_visitante) REFERENCES cadastro_equipes(id_equipe)
+);
+
+CREATE TABLE jogadores_partidas (
+                                    id_jogadores_partidas INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    id_partida INTEGER,
+                                    id_jogador INTEGER,
+                                    gols INTEGER DEFAULT 0,
+                                    cartoes INTEGER DEFAULT 0,
+                                    FOREIGN KEY (id_jogador) REFERENCES cadastro_jogadores(id_jogadores),
+                                    FOREIGN KEY (id_partida) REFERENCES partidas(id_partida),
+                                    UNIQUE(id_jogador, id_partida)
+);
+
+
+INSERT INTO cadastro_equipes (nome)
+VALUES ('Equipe inter'),
+       ('Equipe gremio'),
+       ('Equipe cruzeiro'),
+       ('Equipe flamengo');
+
+
+INSERT INTO cadastro_jogadores (nome, data_nascimento, id_equipe)
+VALUES
+
+    ('Carlos Silva', '1995-01-01', 1),
+    ('Lucas Oliveira', '1994-05-15', 1),
+    ('Felipe Costa', '1992-11-20', 1),
+    ('Rafael Santos', '1996-07-25', 1),
+    ('Gustavo Almeida', '1993-09-13', 1),
+    ('Matheus Pereira', '1990-12-10', 1),
+    ('João Rodrigues', '1994-02-17', 1),
+    ('Eduardo Martins', '1995-06-30', 1),
+    ('Thiago Souza', '1997-01-22', 1),
+    ('Vinícius Lima', '1991-04-05', 1),
+    ('André Costa', '1993-08-30', 1),
+    ('Henrique Santos', '1996-10-11', 1),
+
+
+    ('Vítor Silva', '1993-11-17', 2),
+    ('Bruno Pereira', '1995-03-12', 2),
+    ('Marcos Santos', '1994-01-19', 2),
+    ('João Henrique', '1996-08-07', 2),
+    ('Gabriel Costa', '1992-05-22', 2),
+    ('Ricardo Alves', '1993-09-10', 2),
+    ('Daniel Oliveira', '1990-02-18', 2),
+    ('Luiz Carlos', '1991-11-14', 2),
+    ('Rodrigo Pereira', '1995-04-26', 2),
+    ('Caio Martins', '1994-12-05', 2),
+    ('Rogério Souza', '1996-06-13', 2),
+    ('Lucas Rocha', '1993-07-19', 2),
+
+    ('Lucas Costa', '1992-01-11', 3),
+    ('Vinícius Rocha', '1994-09-17', 3),
+    ('Felipe Martins', '1996-07-07', 3),
+    ('Ricardo Oliveira', '1993-06-23', 3),
+    ('Gustavo Lima', '1992-04-04', 3),
+    ('Thiago Almeida', '1990-11-28', 3),
+    ('José Silva', '1995-12-12', 3),
+    ('Leandro Costa', '1994-02-06', 3),
+    ('Marcelo Souza', '1993-08-08', 3),
+    ('Lucas Santos', '1991-05-17', 3),
+    ('Felipe Rocha', '1996-01-30', 3),
+    ('Rafael Lima', '1992-11-18', 3),
+
+ 
+    ('Guilherme Oliveira', '1995-09-22', 4),
+    ('Anderson Silva', '1993-03-21', 4),
+    ('Ricardo Rocha', '1990-07-02', 4),
+    ('Gabriel Santos', '1994-04-25', 4),
+    ('Lucas Oliveira', '1996-02-03', 4),
+    ('Diego Rocha', '1993-10-16', 4),
+    ('Paulo Alves', '1992-03-05', 4),
+    ('Eduardo Silva', '1991-12-14', 4),
+    ('Thiago Lima', '1995-07-17', 4),
+    ('Rafael Costa', '1994-09-09', 4),
+    ('Fernando Pereira', '1990-08-22', 4),
+    ('Leandro Silva', '1993-11-30', 4);
+
+
+
+INSERT INTO partidas (turno, data, local, id_equipe_casa, id_equipe_visitante)
+SELECT
+    CASE
+        WHEN t1.id_equipe < t2.id_equipe THEN 'Ida'
+        ELSE 'Volta'
+        END AS turno,
+
+    DATE('2025-01-01', '+' || (ROW_NUMBER() OVER (ORDER BY t1.id_equipe, t2.id_equipe) * 7) || ' days') AS data,
+
+    'Estádio Municipal' AS local,
+    t1.id_equipe AS id_equipe_casa,
+    t2.id_equipe AS id_equipe_visitante
+FROM
+    cadastro_equipes t1
+        CROSS JOIN
+    cadastro_equipes t2
+WHERE
+    t1.id_equipe < t2.id_equipe;
+
+INSERT INTO partidas (turno, data, local, id_equipe_casa, id_equipe_visitante)
+SELECT
+    CASE
+        WHEN t1.id_equipe > t2.id_equipe THEN 'Ida'
+        ELSE 'Volta'
+        END AS turno,
+    DATE('2025-01-01', '+' || (ROW_NUMBER() OVER (ORDER BY t1.id_equipe, t2.id_equipe) * 7) || ' days') AS data,
+    'Estádio Municipal' AS local,
+    t2.id_equipe AS id_equipe_casa,
+    t1.id_equipe AS id_equipe_visitante
+FROM
+    cadastro_equipes t1
+        CROSS JOIN
+    cadastro_equipes t2
+WHERE
+    t1.id_equipe < t2.id_equipe;
+
+
+
+
+WITH partidas_aleatorias AS (
+    SELECT id_partida
+    FROM partidas
+    ORDER BY RANDOM()
+    LIMIT 3
+),
+     jogadores_aleatorios AS (
+         SELECT jp.id_jogador, jp.id_partida
+         FROM jogadores_partidas jp
+                  JOIN partidas p ON jp.id_partida = p.id_partida
+         WHERE p.id_partida IN (SELECT id_partida FROM partidas_aleatorias)
+         ORDER BY RANDOM()
+         LIMIT 6
+     )
+
+
+UPDATE jogadores_partidas
+SET cartoes = 1
+WHERE id_jogador IN (SELECT id_jogador FROM jogadores_aleatorios);
+
+
+
+
+WITH
+partidas_sem_cartao AS (
+    SELECT p.id_partida
+    FROM partidas p
+             LEFT JOIN jogadores_partidas jp ON p.id_partida = jp.id_partida
+    WHERE jp.cartoes IS NULL OR jp.cartoes = 0
+    GROUP BY p.id_partida
+    HAVING COUNT(jp.id_jogador) = COUNT(CASE WHEN jp.cartoes IS NULL THEN 1 ELSE NULL END)
+),
+
+
+jogadores_visitante AS (
+    SELECT jp.id_jogador, jp.id_partida
+    FROM jogadores_partidas jp
+             JOIN partidas p ON jp.id_partida = p.id_partida
+             JOIN cadastro_jogadores cj ON cj.id_jogadores = jp.id_jogador
+    WHERE p.id_partida IN (SELECT id_partida FROM partidas_sem_cartao)
+      AND cj.id_equipe = p.id_equipe_visitante -- Relacionando com o id_equipe_visitante
+    ORDER BY RANDOM()
+    LIMIT 2
+)
+
+
+UPDATE jogadores_partidas
+SET cartoes = 1,
+    gols = gols + 1
+WHERE id_jogador IN (SELECT id_jogador FROM jogadores_visitante);
+
+
+
+
+
+
+SELECT
+    p.local,
+    ve.nome AS visitante,
+    SUM(jp_mandante.gols) AS gols_mandante,
+    SUM(jp_visitante.gols) AS gols_visitante,
+    me.nome AS mandante
+FROM
+    partidas p
+        JOIN
+    cadastro_equipes me ON p.id_equipe_casa = me.id_equipe
+        JOIN
+    cadastro_equipes ve ON p.id_equipe_visitante = ve.id_equipe
+        LEFT JOIN
+    jogadores_partidas jp_mandante ON p.id_partida = jp_mandante.id_partida AND jp_mandante.id_jogador IN (SELECT id_jogador FROM jogadores_partidas jp WHERE jp.id_partida = p.id_partida AND jp.id_jogador IN (SELECT id_jogador FROM jogadores_partidas jp WHERE jp.id_partida = p.id_partida AND jp.id_jogador = p.id_equipe_casa))
+        LEFT JOIN
+    jogadores_partidas jp_visitante ON p.id_partida = jp_visitante.id_partida AND jp_visitante.id_jogador IN (SELECT id_jogador FROM jogadores_partidas jp WHERE jp.id_partida = p.id_partida AND jp.id_jogador IN (SELECT id_jogador FROM jogadores_partidas jp WHERE jp.id_partida = p.id_partida AND jp.id_jogador = p.id_equipe_visitante))
+GROUP BY
+    p.local,
+    ve.nome,
+    me.nome,
+    p.id_partida
+ORDER BY
+    p.id_partida;
+
+
+
+
+
+
+WITH jogadores_e_partidas AS (
+    SELECT p.id_partida, cj.id_jogadores AS id_jogador
+    FROM partidas p
+             JOIN cadastro_jogadores cj ON p.id_equipe_casa = cj.id_equipe
+    UNION ALL
+    SELECT p.id_partida, cj.id_jogadores AS id_jogador
+    FROM partidas p
+             JOIN cadastro_jogadores cj ON p.id_equipe_visitante = cj.id_equipe  
+)
+
+
+INSERT INTO jogadores_partidas (id_partida, id_jogador, gols)
+SELECT
+    jp.id_partida,
+    jp.id_jogador,
+    ABS(RANDOM()) % 3
+FROM jogadores_e_partidas jp;
+
+
+
+-- Ex2 - jogador marcou mais gols
+
+SELECT
+    j.nome AS jogador,
+    e.nome AS equipe,
+    SUM(jp.gols) AS total_gols
+FROM
+    jogadores_partidas jp
+        JOIN
+    cadastro_jogadores j ON jp.id_jogador = j.id_jogadores
+        JOIN
+    cadastro_equipes e ON j.id_equipe = e.id_equipe
+GROUP BY
+    j.id_jogadores, e.id_equipe
+ORDER BY
+    total_gols DESC
+LIMIT 1;
+
+
+-- Ex3: jogadores que receberam cartoes
+
+
+SELECT
+    j.nome AS jogador,
+    e.nome AS equipe,
+    SUM(CASE WHEN jp.cartoes = 1 THEN 1 ELSE 0 END) AS cartao_vermelho,
+    SUM(CASE WHEN jp.cartoes = 0 THEN 1 ELSE 0 END) AS cartao_amarelo
+FROM
+    cadastro_jogadores j
+        JOIN
+    cadastro_equipes e ON j.id_equipe = e.id_equipe
+        LEFT JOIN
+    jogadores_partidas jp ON jp.id_jogador = j.id_jogadores
+WHERE
+    jp.cartoes IS NOT 0
+GROUP BY
+    j.id_jogadores, e.id_equipe
+ORDER BY
+    j.nome;
+
+
+
+
+-- eX4 - Equipe qeu nao receberam cartao
+
+SELECT
+    e.nome AS equipe
+FROM
+    cadastro_equipes e
+        LEFT JOIN
+    cadastro_jogadores j ON e.id_equipe = j.id_equipe
+        LEFT JOIN
+    jogadores_partidas jp ON j.id_jogadores = jp.id_jogador
+WHERE jp.cartoes = 0
+GROUP BY
+    e.id_equipe
+HAVING
+    COUNT(CASE WHEN jp.cartoes != 0 THEN 1 ELSE NULL END) = 0
+ORDER BY
+    e.nome;
+
+
+-- Ex5: estadio mais jogado
+
+SELECT
+    local,
+    COUNT(*) AS numero_de_partidas
+FROM
+    partidas
+GROUP BY
+    local
+ORDER BY
+    numero_de_partidas DESC
+LIMIT 1;
+
+
+
+
+
+-- Ex6: Equipe com maior saldo de gols
+
+SELECT
+    e.nome AS equipe,
+    SUM(CASE WHEN p.id_equipe_casa = e.id_equipe THEN jp.gols ELSE 0 END) -
+    SUM(CASE WHEN p.id_equipe_visitante = e.id_equipe THEN jp.gols ELSE 0 END) AS saldo_de_gols
+FROM
+    cadastro_equipes e
+        LEFT JOIN
+    partidas p ON p.id_equipe_casa = e.id_equipe OR p.id_equipe_visitante = e.id_equipe
+        LEFT JOIN
+    jogadores_partidas jp ON jp.id_partida = p.id_partida
+GROUP BY
+    e.id_equipe
+ORDER BY
+    saldo_de_gols DESC
+LIMIT 1;
+
+
+
+
+-- Ex6: equipe com mais pontos (modelo pontos corridos)
+
+-- Consulta para calcular os pontos por equipe
+
+
+
+-- Ex7 extra: Jogadores com mais gols em uma unica partida
+
+
+
+SELECT
+    j.nome AS jogador,
+    COUNT(DISTINCT jp.id_partida) AS total_partidas,
+    SUM(jp.gols) AS total_gols
+FROM
+    jogadores_partidas jp
+        JOIN
+    cadastro_jogadores j ON j.id_jogadores = jp.id_jogador
+WHERE
+    jp.gols > 0
+GROUP BY
+    jp.id_jogador
+HAVING
+    COUNT(DISTINCT jp.id_partida) > 1
+ORDER BY
+    total_gols DESC;
+
+
+
+
+
+
