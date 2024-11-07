@@ -1,0 +1,194 @@
+CREATE TABLE albuns (
+    id_album INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo VARCHAR(70),
+    cantor VARCHAR(30),
+    tipo VARCHAR(10),
+    data_lancamento DATE
+);
+
+CREATE TABLE turnes (
+    id_turne INTEGER PRIMARY KEY AUTOINCREMENT,
+    artista VARCHAR(70),
+    inicio DATE,
+    fim DATE,
+    localizacao VARCHAR(200)
+);
+
+CREATE TABLE cadastro_pf (
+    id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(100),
+    telefone VARCHAR(15),
+    endereco VARCHAR(200),
+    cpf VARCHAR(14) UNIQUE
+);
+
+CREATE TABLE avaliacao (
+    id_avaliacao INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_cliente INTEGER,
+    id_album INTEGER,
+    id_turne INTEGER,
+    avaliacao INTEGER CHECK (avaliacao >= 1 AND avaliacao <= 5),
+    comentario TEXT,
+    FOREIGN KEY (id_album) REFERENCES albuns(id_album),
+    FOREIGN KEY (id_turne) REFERENCES turnes(id_turne),
+    FOREIGN KEY (id_cliente) REFERENCES cadastro_pf(id_cliente)
+);
+
+INSERT INTO turnes (artista, inicio, fim, localizacao)
+VALUES
+    ('Banda X', '2024-01-10', '2024-03-15', 'São Paulo'),
+    ('Banda Y', '2024-02-05', '2024-04-20', 'Rio de Janeiro'),
+    ('Banda Z', '2024-03-01', '2024-05-10', 'Belo Horizonte'),
+    ('Banda A', '2024-01-15', '2024-02-25', 'Curitiba'),
+    ('Banda B', '2024-04-01', '2024-06-30', 'Porto Alegre'),
+    ('Banda C', '2024-02-20', '2024-05-05', 'Salvador'),
+    ('Banda D', '2024-03-10', '2024-04-10', 'Recife'),
+    ('Banda E', '2024-05-01', '2024-07-15', 'Fortaleza'),
+    ('Banda F', '2024-06-15', '2024-08-30', 'Manaus'),
+    ('Banda G', '2024-07-01', '2024-09-10', 'Brasília');
+
+INSERT INTO albuns (titulo, cantor, tipo, data_lancamento)
+VALUES
+    ('Album Rock', 'Banda Metalica', 'CD', '2020-01-01'),
+    ('Album Sertanejo', 'Banda Henrique e Juliano', 'Vinil', '1995-08-15'),
+    ('Best of Pop', 'Artista Pop', 'CD', '2018-11-20'),
+    ('Rock Classics', 'Banda Rock', 'Vinil', '1985-07-10'),
+    ('Live in Concert', 'Banda Jazz', 'CD', '2019-03-22'),
+    ('Dance Party', 'DJ Grooves', 'Fita', '2021-06-01'),
+    ('Piano Solo', 'Artista Clássico', 'Vinil', '1975-05-05'),
+    ('Retro Hits', 'Banda Oldies', 'CD', '2017-09-09'),
+    ('Electronic Waves', 'DJ Future', 'Fita', '2020-07-11'),
+    ('Acoustic Nights', 'Artista Acústico', 'Vinil', '2016-04-14'),
+    ('Live in Tokyo', 'Banda Metal', 'CD', '2012-02-01'),
+    ('Pop Sensations', 'Artista Pop Star', 'Vinil', '2014-10-25'),
+    ('Jazz Essentials', 'Banda Jazz Masters', 'Fita', '1983-12-15'),
+    ('Rock Legends', 'Banda Legends', 'CD', '2005-11-11'),
+    ('Classical Masterpieces', 'Orquestra Sinfônica', 'Vinil', '1980-08-30');
+
+INSERT INTO cadastro_pf (nome, telefone, endereco, cpf)
+VALUES
+    ('João Silva', '1234-5678', 'Rua A, 123', '123.456.789-09'),
+    ('Maria Oliveira', '9876-5432', 'Avenida B, 456', '987.654.321-00'),
+    ('Carlos Pereira', '3333-4444', 'Rua C, 789', '111.222.333-44'),
+    ('Ana Souza', '5555-6666', 'Rua D, 101', '222.333.444-55'),
+    ('Pedro Costa', '7777-8888', 'Rua E, 202', '333.444.555-66'),
+    ('Paula Lima', '9999-0000', 'Rua F, 303', '444.555.666-77'),
+    ('Lucas Martins', '1234-5679', 'Rua G, 404', '555.666.777-88'),
+    ('Julia Rocha', '2345-6789', 'Rua H, 505', '666.777.888-99'),
+    ('Felipe Almeida', '3456-7890', 'Rua I, 606', '777.888.999-00'),
+    ('Larissa Souza', '4567-8901', 'Rua J, 707', '888.999.000-11');
+
+INSERT INTO avaliacao (id_cliente, id_album, id_turne, avaliacao)
+VALUES
+    (1, 1, NULL, 4),
+    (2, 2, NULL, 5),
+    (3, 3, NULL, 3),
+    (4, 4, NULL, 4),
+    (5, 5, NULL, 2);
+
+INSERT INTO avaliacao (id_cliente, id_album, id_turne, avaliacao)
+VALUES
+    (1, NULL, 1, 4),
+    (2, NULL, 2, 5),
+    (3, NULL, 3, 5);
+
+INSERT INTO avaliacao (id_cliente, id_album, id_turne, avaliacao)
+VALUES
+    (1, NULL, 6, 4),
+    (2, NULL, 7, 5),
+    (3, NULL, 8, 5);
+-- parte 2
+SELECT a.titulo, AVG(av.avaliacao) AS media_avaliacao
+FROM albuns a
+         JOIN avaliacao av ON a.id_album = av.id_album
+GROUP BY a.id_album
+ORDER BY media_avaliacao DESC
+LIMIT 3;
+
+
+SELECT a.titulo, COUNT(av.id_avaliacao) AS quantidade_reviews
+FROM albuns a
+         JOIN avaliacao av ON a.id_album = av.id_album
+GROUP BY a.id_album
+ORDER BY quantidade_reviews DESC;
+
+
+
+
+SELECT tipo, COUNT(*) AS quantidade_album
+FROM albuns
+GROUP BY tipo
+ORDER BY quantidade_album DESC
+LIMIT 1;
+
+
+
+SELECT c.nome, COUNT(av.id_avaliacao) AS quantidade_reviews_album
+FROM cadastro_pf c
+         JOIN avaliacao av ON c.id_cliente = av.id_cliente
+WHERE av.id_album IS NOT NULL
+GROUP BY c.id_cliente
+ORDER BY quantidade_reviews_album DESC
+LIMIT 3;
+
+
+
+SELECT c.nome, COUNT(av.id_avaliacao) AS quantidade_reviews_show
+FROM cadastro_pf c
+         JOIN avaliacao av ON c.id_cliente = av.id_cliente
+WHERE av.id_turne IS NOT NULL
+GROUP BY c.id_cliente
+ORDER BY quantidade_reviews_show DESC
+LIMIT 3;
+
+
+
+SELECT c.nome
+FROM cadastro_pf c
+LEFT JOIN avaliacao av ON c.id_cliente = av.id_cliente
+WHERE av.id_avaliacao IS NULL;
+
+
+SELECT
+    a.cantor AS artista,
+    AVG(av.avaliacao) AS media_album
+FROM
+    albuns a
+JOIN
+    avaliacao av ON a.id_album = av.id_album
+GROUP BY
+    a.cantor
+ORDER BY
+    media_album DESC;
+
+
+
+
+
+SELECT
+    t.artista,
+    AVG(av.avaliacao) AS media_show
+FROM
+    turnes t
+JOIN
+    avaliacao av ON t.id_turne = av.id_turne
+GROUP BY
+    t.artista
+ORDER BY
+    media_show DESC;
+
+-- Ex extra.:quantos albuns atingiram nota maxima
+SELECT
+    a.titulo,
+    COUNT(av.id_avaliacao) AS quantidade_reviews_5
+FROM
+    albuns a
+JOIN
+    avaliacao av ON a.id_album = av.id_album
+WHERE
+    av.avaliacao = 5
+GROUP BY
+    a.id_album
+ORDER BY
+    quantidade_reviews_5 DESC;
+
