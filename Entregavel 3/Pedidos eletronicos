@@ -1,0 +1,430 @@
+CREATE TABLE categorias(
+    id_categoria INTEGER PRIMARY KEY,
+    nome VARCHAR(70)
+);
+
+CREATE TABLE cadastro_produtos(
+    codigo INTEGER PRIMARY KEY,
+    nome VARCHAR(70),
+    descricao TEXT,
+    preco FLOAT,
+    quantidade INTEGER,
+    id_categoria INTEGER,
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+);
+
+CREATE TABLE cadastro_cliente(
+    email TEXT PRIMARY KEY,
+    endereco_obrigatorio TEXT NOT NULL,
+    endereco_opcional TEXT,
+    telefone INTEGER
+);
+
+CREATE TABLE venda (
+    idvenda INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_cliente TEXT,
+    data DATE,
+    valor_total FLOAT,
+    status VARCHAR(10),
+    codigo_produto INTEGER,
+    FOREIGN KEY (codigo_produto) REFERENCES cadastro_produtos(codigo),
+    FOREIGN KEY (id_cliente) REFERENCES cadastro_cliente(email)
+);
+
+CREATE TABLE cadastro_funcionario(
+    matricula INTEGER PRIMARY KEY,
+    nome VARCHAR(70)
+);
+
+CREATE TABLE inspetor(
+    matricula INTEGER PRIMARY KEY,
+    nome VARCHAR(70)
+);
+
+CREATE TABLE analise_final(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_venda INTEGER,
+    codigo_produto INTEGER,
+    id_funcionario INTEGER,
+    id_inspetor INTEGER,
+    verificado INTEGER DEFAULT 0,
+    valor_total FLOAT,
+    quantidade INTEGER,
+    FOREIGN KEY (id_venda) REFERENCES venda(idvenda),
+    FOREIGN KEY (codigo_produto) REFERENCES cadastro_produtos(codigo),
+    FOREIGN KEY (id_funcionario) REFERENCES cadastro_funcionario(matricula),
+    FOREIGN KEY (id_inspetor) REFERENCES inspetor(matricula)
+);
+
+CREATE TABLE telefones_cliente (
+    id_cliente TEXT,
+    telefone INTEGER,
+    FOREIGN KEY (id_cliente) REFERENCES cadastro_cliente(email)
+);
+
+
+
+INSERT INTO categorias (id_categoria, nome)
+VALUES
+    (1, 'Smartphones'),
+    (2, 'Fones de Ouvido'),
+    (3, 'Computadores'),
+    (4, 'Televisores'),
+    (5, 'Acessórios');
+
+
+
+
+INSERT INTO cadastro_produtos (codigo, nome, descricao, preco, quantidade, id_categoria)
+VALUES
+    (1, 'Smartphone Modelo X', 'Smartphone com 128GB de armazenamento', 1999.99, 50, 1),
+    (2, 'Smartphone Modelo Y', 'Smartphone com 64GB de armazenamento', 1499.99, 30, 1),
+    (3, 'Smartphone Modelo Z', 'Smartphone com 256GB de armazenamento', 2499.99, 40, 1),
+    (4, 'Fone de Ouvido Bluetooth', 'Fone de ouvido sem fio com cancelamento de ruído', 299.99, 100, 2),
+    (5, 'Fone de Ouvido Gaming', 'Fone de ouvido sem fio com microfone', 349.99, 80, 2),
+    (6, 'Fone de Ouvido In-Ear', 'Fone de ouvido intra-auricular com fio', 129.99, 150, 2),
+    (7, 'Laptop Pro', 'Laptop com 16GB de RAM e 512GB de SSD', 4999.99, 20, 3),
+    (8, 'Laptop Slim', 'Laptop ultra-fino com 8GB de RAM e 256GB de SSD', 3499.99, 15, 3),
+    (9, 'Desktop All-in-One', 'Computador desktop tudo-em-um com tela de 24 polegadas', 3499.99, 25, 3),
+    (10, 'Smart TV 50" 4K', 'TV de 50 polegadas com resolução 4K e Android TV', 2999.99, 40, 4),
+    (11, 'Smart TV 65" 4K', 'TV de 65 polegadas com resolução 4K e som Dolby', 4999.99, 30, 4),
+    (12, 'TV LED 32"', 'Televisor LED de 32 polegadas', 999.99, 100, 4),
+    (13, 'Carregador Wireless', 'Carregador sem fio para dispositivos compatíveis', 129.99, 200, 5),
+    (14, 'Cabo USB-C', 'Cabo USB-C para carregamento rápido', 29.99, 500, 5),
+    (15, 'Capa para Smartphone', 'Capa protetora de silicone para smartphones', 49.99, 300, 5),
+    (16, 'Smartphone Modelo A', 'Smartphone com 128GB de armazenamento', 2299.99, 45, 1),
+    (17, 'Smartphone Modelo B', 'Smartphone com 64GB de armazenamento', 1799.99, 35, 1),
+    (18, 'Smartphone Modelo C', 'Smartphone com 256GB de armazenamento', 2699.99, 38, 1),
+    (19, 'Fone de Ouvido Esportivo', 'Fone de ouvido resistente à água para atividades físicas', 199.99, 120, 2),
+    (20, 'Fone de Ouvido Hi-Fi', 'Fone de ouvido com som de alta fidelidade', 499.99, 70, 2),
+    (21, 'Fone de Ouvido Gamer Pro', 'Fone de ouvido gaming com som surround', 399.99, 60, 2),
+    (22, 'Notebook Gamer', 'Notebook para jogos com placa de vídeo dedicada', 6999.99, 10, 3),
+    (23, 'Notebook Para Estudo', 'Notebook leve e compacto para uso acadêmico', 2799.99, 20, 3),
+    (24, 'Monitor Full HD', 'Monitor de 24 polegadas com resolução Full HD', 799.99, 50, 3),
+    (25, 'TV 4K 43"', 'TV de 43 polegadas com resolução 4K', 2299.99, 70, 4),
+    (26, 'TV LED 55"', 'Televisor LED de 55 polegadas com som estéreo', 3599.99, 40, 4),
+    (27, 'Cabo HDMI 2.1', 'Cabo HDMI 2.1 para TV 4K e console de jogos', 89.99, 250, 5),
+    (28, 'Carregador Rápido 18W', 'Carregador rápido de 18W com USB-C', 69.99, 400, 5),
+    (29, 'Suporte para Celular', 'Suporte ajustável para celular', 29.99, 150, 5),
+    (30, 'Power Bank 10000mAh', 'Carregador portátil de 10000mAh para smartphones', 149.99, 200, 5);
+
+
+
+INSERT INTO cadastro_cliente (email, endereco_obrigatorio, endereco_opcional, telefone)
+VALUES
+    ('cliente1@example.com', 'Rua A, 123', 'Apt 4', '123456789'),
+    ('cliente2@example.com', 'Av. Brasil, 456', 'Bloco B', '987654321'),
+    ('cliente3@example.com', 'Rua das Flores, 789', 'Andar 2', '456789123'),
+    ('cliente4@example.com', 'Rua dos Ipês, 321', 'Apt 101', '654321987'),
+    ('cliente5@example.com', 'Av. Paulista, 987', 'Próximo ao shopping', '321654987');
+
+
+INSERT INTO telefones_cliente (id_cliente, telefone)
+VALUES
+    ('cliente1@example.com', '987654321'),
+    ('cliente1@example.com', '123123123'),
+    ('cliente2@example.com', '456456456'),
+    ('cliente2@example.com', '789789789'),
+    ('cliente3@example.com', '654654654'),
+    ('cliente3@example.com', '987987987'),
+    ('cliente4@example.com', '321321321'),
+    ('cliente4@example.com', '654654654'),
+    ('cliente5@example.com', '112233445'),
+    ('cliente5@example.com', '556677889');
+
+
+INSERT INTO cadastro_funcionario (matricula, nome)
+VALUES
+    (1001, 'Carlos Silva'),
+    (1002, 'Ana Souza'),
+    (1003, 'Roberto Lima');
+
+
+
+
+
+-- Vendas para o Cliente 1
+-- Primeira venda para o Cliente 1
+INSERT INTO venda (id_cliente, data, valor_total, status, codigo_produto)
+VALUES
+    ('cliente1@example.com', '2024-11-02', 0, 'PEDIDO FEITO', 1),  -- Produto 1
+    ('cliente1@example.com', '2024-11-02', 0, 'PEDIDO FEITO', 2);  -- Produto 2
+
+-- Segunda venda para o Cliente 1
+INSERT INTO venda (id_cliente, data, valor_total, status, codigo_produto)
+VALUES
+    ('cliente1@example.com', '2024-11-03', 0, 'PEDIDO FEITO', 1),  -- Produto 1
+    ('cliente1@example.com', '2024-11-03', 0, 'PEDIDO FEITO', 5);  -- Produto 5
+
+-- Vendas para o Cliente 2
+-- Primeira venda para o Cliente 2
+INSERT INTO venda (id_cliente, data, valor_total, status, codigo_produto)
+VALUES
+    ('cliente2@example.com', '2024-11-02', 0, 'PEDIDO FEITO', 6),  -- Produto 6
+    ('cliente2@example.com', '2024-11-02', 0, 'PEDIDO FEITO', 7);  -- Produto 7
+
+-- Segunda venda para o Cliente 2
+INSERT INTO venda (id_cliente, data, valor_total, status, codigo_produto)
+VALUES
+    ('cliente2@example.com', '2024-11-03', 0, 'PEDIDO FEITO', 4),  -- Produto 4
+    ('cliente2@example.com', '2024-11-03', 0, 'PEDIDO FEITO', 2);  -- Produto 2
+
+-- Vendas para o Cliente 3
+-- Primeira venda para o Cliente 3
+INSERT INTO venda (id_cliente, data, valor_total, status, codigo_produto)
+VALUES
+    ('cliente3@example.com', '2024-11-02', 0, 'PEDIDO FEITO', 3),  -- Produto 3
+    ('cliente3@example.com', '2024-11-02', 0, 'PEDIDO FEITO', 5);  -- Produto 5
+
+-- Segunda venda para o Cliente 3
+INSERT INTO venda (id_cliente, data, valor_total, status, codigo_produto)
+VALUES
+    ('cliente3@example.com', '2024-11-03', 0, 'PEDIDO FEITO', 9),  -- Produto 9
+    ('cliente3@example.com', '2024-11-03', 0, 'PEDIDO FEITO', 15); -- Produto 15
+
+-- Atualização das quantidades e valores totais para as vendas
+UPDATE venda
+SET valor_total = (
+    SELECT SUM(cadastro_produtos.preco * 1)  -- Considerando que a quantidade é 1 para cada produto
+    FROM cadastro_produtos
+    WHERE cadastro_produtos.codigo = venda.codigo_produto
+),
+quantidade_produtos = (
+    SELECT COUNT(*)
+    FROM venda v2
+    WHERE v2.id_cliente = venda.id_cliente AND v2.data = venda.data
+)
+WHERE idvenda IN (
+    SELECT idvenda
+    FROM venda
+    WHERE id_cliente IN ('cliente1@example.com', 'cliente2@example.com', 'cliente3@example.com')
+);
+
+ALTER TABLE venda ADD COLUMN quantidade_produtos INTEGER DEFAULT 1;
+
+
+
+
+UPDATE venda
+SET status = 'EM SEPARACAO'
+WHERE idvenda = (
+    SELECT idvenda
+    FROM venda
+    WHERE id_cliente = 'cliente1@example.com' AND data = '2024-11-02'
+    LIMIT 1
+);
+
+UPDATE venda
+SET status = 'EM SEPARACAO'
+WHERE idvenda = (
+    SELECT idvenda
+    FROM venda
+    WHERE id_cliente = 'cliente2@example.com' AND data = '2024-11-02'
+    LIMIT 1
+);
+
+UPDATE venda
+SET status = 'EM SEPARACAO'
+WHERE idvenda = (
+    SELECT idvenda
+    FROM venda
+    WHERE id_cliente = 'cliente3@example.com' AND data = '2024-11-02'
+    LIMIT 1
+);
+
+INSERT INTO analise_final (id_venda, codigo_produto, id_funcionario, id_inspetor, verificado, valor_total, quantidade)
+SELECT idvenda, codigo_produto, 1001, 1003, 0,
+       cadastro_produtos.preco * venda.quantidade_produtos, venda.quantidade_produtos
+FROM venda
+JOIN cadastro_produtos ON venda.codigo_produto = cadastro_produtos.codigo
+WHERE venda.id_cliente = 'cliente1@example.com' AND venda.status = 'EM SEPARACAO';
+
+INSERT INTO analise_final (id_venda, codigo_produto, id_funcionario, id_inspetor, verificado, valor_total, quantidade)
+SELECT idvenda, codigo_produto, 1002, 1003, 0,
+       cadastro_produtos.preco * venda.quantidade_produtos, venda.quantidade_produtos
+FROM venda
+JOIN cadastro_produtos ON venda.codigo_produto = cadastro_produtos.codigo
+WHERE venda.id_cliente = 'cliente2@example.com' AND venda.status = 'EM SEPARACAO';
+
+INSERT INTO analise_final (id_venda, codigo_produto, id_funcionario, id_inspetor, verificado, valor_total, quantidade)
+SELECT idvenda, codigo_produto, 1001, 1002, 0,
+       cadastro_produtos.preco * venda.quantidade_produtos, venda.quantidade_produtos
+FROM venda
+JOIN cadastro_produtos ON venda.codigo_produto = cadastro_produtos.codigo
+WHERE venda.id_cliente = 'cliente3@example.com' AND venda.status = 'EM SEPARACAO';
+
+ALTER TABLE analise_final ADD COLUMN data_verificacao DATE;
+
+
+UPDATE analise_final
+SET verificado = 1, data_verificacao = '2024-11-04'
+WHERE id_venda IN (
+    SELECT idvenda
+    FROM venda
+    WHERE status = 'EM SEPARACAO' AND id_cliente IN ('cliente1@example.com', 'cliente2@example.com', 'cliente3@example.com')
+);
+
+UPDATE venda
+SET status = 'ENVIADO', data = '2024-11-04'
+WHERE idvenda IN (
+    SELECT idvenda
+    FROM venda
+    WHERE status = 'EM SEPARACAO' AND id_cliente IN ('cliente1@example.com', 'cliente2@example.com', 'cliente3@example.com')
+);
+
+
+UPDATE venda
+SET status = 'CANCELADO'
+WHERE idvenda = (
+    SELECT idvenda
+    FROM venda
+    WHERE id_cliente = 'cliente1@example.com' AND data = '2024-11-02'
+    LIMIT 1
+);
+
+ALTER TABLE venda ADD COLUMN meio VARCHAR(10);
+
+
+
+UPDATE venda
+SET meio = 'telefone'
+WHERE id_cliente IN (
+    SELECT id_cliente
+    FROM telefones_cliente
+);
+
+
+INSERT INTO cadastro_cliente (email, endereco_obrigatorio, endereco_opcional, telefone)
+VALUES ('cliente6@example.com', 'Rua Nova, 456', 'Bloco C', NULL);
+
+UPDATE venda
+SET meio = 'online'
+WHERE meio IS NULL;
+
+
+-- Ex1 - Produtos meia vendidos e o meio que fora vendidos
+SELECT
+    p.nome AS produto,
+    v.meio,
+    SUM(v.quantidade_produtos) AS quantidade_vendida
+FROM
+    venda v
+JOIN
+    cadastro_produtos p ON v.codigo_produto = p.codigo
+GROUP BY
+    p.nome, v.meio
+ORDER BY
+    quantidade_vendida DESC;
+
+
+
+
+-- Ex2 - porcentagem de produtos que passam pela inspecao
+
+SELECT
+    (COUNT(CASE WHEN verificado = 1 THEN 1 END) * 100.0) / COUNT(*) AS porcentagem_inspecao
+FROM
+    analise_final;
+
+
+
+-- Ex3 - produtos verificados mais vezes
+SELECT
+    p.nome AS produto,
+    COUNT(*) AS total_verificacoes
+FROM
+    analise_final af
+JOIN
+    cadastro_produtos p ON af.codigo_produto = p.codigo
+WHERE
+    af.verificado = 1
+GROUP BY
+    p.nome
+ORDER BY
+    total_verificacoes DESC;
+
+-- Ex4 - Ordenar o valor total vendido do maior para o menor
+
+SELECT
+    c.nome AS categoria,
+    SUM(p.preco * v.quantidade_produtos) AS valor_total_vendido
+FROM
+    venda v
+JOIN
+    cadastro_produtos p ON v.codigo_produto = p.codigo
+JOIN
+    categorias c ON p.id_categoria = c.id_categoria
+GROUP BY
+    c.nome
+ORDER BY
+    valor_total_vendido DESC;
+
+
+SELECT
+    AVG(JULIANDAY(af.data_verificacao) - JULIANDAY(v.data)) AS tempo_medio_verificacao
+FROM
+    analise_final af
+JOIN
+    venda v ON af.id_venda = v.idvenda
+WHERE
+    af.data_verificacao IS NOT NULL;
+
+
+--Ex6 - Qual meio que cada cliente mais gosta de commprar
+
+SELECT
+    v.id_cliente,
+    v.meio,
+    COUNT(*) AS quantidade_pedidos
+FROM
+    venda v
+GROUP BY
+    v.id_cliente, v.meio
+ORDER BY
+    v.id_cliente, quantidade_pedidos DESC;
+
+
+-- Ex7 - listando todos os enderecos e telefones
+
+SELECT
+    c.email AS cliente_email,
+    c.endereco_obrigatorio,
+    c.endereco_opcional,
+    MAX(CASE WHEN t.row_num = 1 THEN t.telefone END) AS telefone_1,
+    MAX(CASE WHEN t.row_num = 2 THEN t.telefone END) AS telefone_2
+FROM
+    cadastro_cliente c
+LEFT JOIN (
+    SELECT
+        tc.id_cliente,
+        tc.telefone,
+        ROW_NUMBER() OVER (PARTITION BY tc.id_cliente ORDER BY tc.telefone) AS row_num
+    FROM
+        telefones_cliente tc
+) t ON c.email = t.id_cliente
+GROUP BY
+    c.email, c.endereco_obrigatorio, c.endereco_opcional
+ORDER BY
+    c.email;
+
+
+-- Ex extra - os produtos mais vendidos por quantidade em cada categoria
+
+SELECT
+    c.nome AS categoria_nome,
+    p.nome AS produto_nome,
+    SUM(v.quantidade_produtos) AS total_vendido
+FROM
+    venda v
+JOIN
+    cadastro_produtos p ON v.codigo_produto = p.codigo
+JOIN
+    categorias c ON p.id_categoria = c.id_categoria
+GROUP BY
+    c.nome, p.nome
+ORDER BY
+    c.nome, total_vendido DESC;
+
+
+
+
