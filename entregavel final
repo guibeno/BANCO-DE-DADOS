@@ -1,59 +1,59 @@
 CREATE TABLE IF NOT EXISTS pedidos_concluidos (
-                    id_pedido INTEGER,
-                    nome_cliente TEXT,
-                    total_compra INTEGER,
-                    acoes VARCHAR(30),
-                    id_restaurante INTEGER
-                );
+                                                  id_pedido INTEGER,
+                                                  nome_cliente TEXT,
+                                                  total_compra INTEGER,
+                                                  acoes VARCHAR(30),
+                                                  id_restaurante INTEGER
+);
 
 
 CREATE TABLE IF NOT EXISTS pedidos_cancelados (
-                    id_pedido INTEGER PRIMARY KEY,
-                    nome_cliente VARCHAR(50),
-                    total_compra INTEGER,
-                    acoes VARCHAR(30),
-                    id_restaurante INTEGER
-                        );
+                                                  id_pedido INTEGER PRIMARY KEY,
+                                                  nome_cliente VARCHAR(50),
+                                                  total_compra INTEGER,
+                                                  acoes VARCHAR(30),
+                                                  id_restaurante INTEGER
+);
 
 
 CREATE TABLE IF NOT EXISTS restaurantes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
-            comissao INTEGER NOT NULL,
-            email VARCHAR(100) NOT NULL UNIQUE,
-            senha VARCHAR (100) NOT NULL,
-            data DATE,
-            is_admin BOOLEAN DEFAULT 0
-        );
+                                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                            nome TEXT NOT NULL,
+                                            comissao INTEGER NOT NULL,
+                                            email VARCHAR(100) NOT NULL UNIQUE,
+                                            senha VARCHAR (100) NOT NULL,
+                                            data DATE,
+                                            is_admin BOOLEAN DEFAULT 0
+);
 
 CREATE TABLE IF NOT EXISTS produtos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            restaurante_id INTEGER,
-            nome TEXT NOT NULL,
-            preco REAL NOT NULL,
-            FOREIGN KEY (restaurante_id) REFERENCES restaurantes(id)
-        );
+                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        restaurante_id INTEGER,
+                                        nome TEXT NOT NULL,
+                                        preco REAL NOT NULL,
+                                        FOREIGN KEY (restaurante_id) REFERENCES restaurantes(id)
+);
 
 CREATE TABLE IF NOT EXISTS cadastro_cliente (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT,
-            email VARCHAR(100) UNIQUE,
-            senha VARCHAR(100),
-            data DATE
-        );
+                                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                nome TEXT,
+                                                email VARCHAR(100) UNIQUE,
+                                                senha VARCHAR(100),
+                                                data DATE
+);
 
 CREATE TABLE IF NOT EXISTS vendas(
-            id_restaurante INTEGER,
-            id_cliente INTEGER,
-            venda_id INTEGER,
-            id_produto INTEGER,
-            nome_produto VARCHAR(50),
-            momento_compra DATE,
-            quantidade INTEGER,
-            preco_total REAL,
-            status INTEGER,
-            FOREIGN KEY (id_cliente) REFERENCES cadastro_cliente(id)
-        );
+                                     id_restaurante INTEGER,
+                                     id_cliente INTEGER,
+                                     venda_id INTEGER,
+                                     id_produto INTEGER,
+                                     nome_produto VARCHAR(50),
+                                     momento_compra DATE,
+                                     quantidade INTEGER,
+                                     preco_total REAL,
+                                     status INTEGER,
+                                     FOREIGN KEY (id_cliente) REFERENCES cadastro_cliente(id)
+);
 
 
 -- Inserir dados na tabela pedidos_concluidos
@@ -122,7 +122,9 @@ VALUES
     (1, 2, 123, 2, 'Lasanha', '2024-11-24', 2, 100.00, 3),
     (2, 3, 124, 3, 'batata frita', '2024-11-25', 5, 75.00, 3),
     (3, 1, 125, 1, 'Sushi', '2024-11-26', 1, 60.00, 3),
-    (1, 3, 126, 2, 'Lasanha', '2024-11-27', 2, 100.00, 3);
+    (1, 3, 126, 2, 'Lasanha', '2024-11-27', 2, 100.00, 3),
+    (1, 3, 127, 2, 'Lasanha', '2024-11-27', 2, 100.00, 10);
+
 
 
 
@@ -170,7 +172,7 @@ SELECT
         WHEN status = 3 THEN 'Pedido Concluído'
         WHEN status = 10 THEN 'Pedido Cancelado'
         ELSE 'Status Desconhecido'
-    END AS status_nome,
+        END AS status_nome,
     COUNT(*) AS qtd_pedidos
 FROM vendas
 WHERE status IN (0, 1, 2, 3, 10)
@@ -195,7 +197,7 @@ GROUP BY data_compra;
 
 
 
-
+-- produto mais vendido
 SELECT id_produto, COUNT(*) AS quantidade_pedidos
 FROM vendas
 WHERE status = 3
@@ -208,7 +210,7 @@ LIMIT 1;
 -- comissao por venda
 SELECT v.venda_id, v.preco_total, r.comissao
 FROM vendas v
-JOIN restaurantes r ON v.id_restaurante = r.id
+         JOIN restaurantes r ON v.id_restaurante = r.id
 WHERE v.status = 3 AND v.id_restaurante;
 
 
@@ -239,7 +241,7 @@ FROM cadastro_cliente;
 
 SELECT r.nome AS restaurante, COUNT(DISTINCT v.id_cliente) AS clientes_unicos
 FROM vendas v
-JOIN restaurantes r ON v.id_restaurante = r.id
+         JOIN restaurantes r ON v.id_restaurante = r.id
 WHERE v.status = 3
 GROUP BY v.id_restaurante
 ORDER BY r.nome;
@@ -258,7 +260,7 @@ SELECT
     (SUM(v.preco_total) / COUNT(*)) AS ticket_medio
 FROM
     vendas v
-JOIN
+        JOIN
     restaurantes r ON v.id_restaurante = r.id
 WHERE
     v.status = 3
@@ -273,19 +275,19 @@ GROUP BY
 -- consulta de pedidos por mes no restaurante
 
 SELECT
-r.nome AS nome_restaurante,
-strftime('%Y-%m', v.momento_compra) AS mes,
-COUNT(*) AS total_pedidos
+    r.nome AS nome_restaurante,
+    strftime('%Y-%m', v.momento_compra) AS mes,
+    COUNT(*) AS total_pedidos
 FROM
-vendas v
-JOIN
-restaurantes r ON v.id_restaurante = r.id
+    vendas v
+        JOIN
+    restaurantes r ON v.id_restaurante = r.id
 WHERE
-v.status = 3
+    v.status = 3
 GROUP BY
-r.nome, strftime('%Y-%m', v.momento_compra)
+    r.nome, strftime('%Y-%m', v.momento_compra)
 ORDER BY
-r.nome, mes;
+    r.nome, mes;
 
 
 
@@ -293,19 +295,18 @@ r.nome, mes;
 
 -- cliente distintos por restaurante
 SELECT
-   r.nome AS nome_restaurante,
-   COUNT(DISTINCT v.id_cliente) AS clientes_distintos
+    r.nome AS nome_restaurante,
+    COUNT(DISTINCT v.id_cliente) AS clientes_distintos
 FROM
-   vendas v
-JOIN
-   restaurantes r ON v.id_restaurante = r.id
+    vendas v
+        JOIN
+    restaurantes r ON v.id_restaurante = r.id
 WHERE
-   v.status = 3
+    v.status = 3
 GROUP BY
-   r.nome
+    r.nome
 ORDER BY
-   clientes_distintos DESC;
-
+    clientes_distintos DESC;
 
 
 
