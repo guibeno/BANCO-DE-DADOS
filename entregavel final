@@ -1,0 +1,306 @@
+CREATE TABLE IF NOT EXISTS pedidos_concluidos (
+                    id_pedido INTEGER,
+                    nome_cliente TEXT,
+                    total_compra INTEGER,
+                    acoes TEXT,
+                    id_restaurante INTEGER
+                );
+
+
+CREATE TABLE IF NOT EXISTS pedidos_cancelados (
+                    id_pedido INTEGER PRIMARY KEY,
+                    nome_cliente TEXT,
+                    total_compra INTEGER,
+                    acoes TEXT,
+                    id_restaurante INTEGER
+                        );
+
+
+CREATE TABLE IF NOT EXISTS restaurantes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            comissao INTEGER NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            senha TEXT NOT NULL,
+            data DATE,
+            is_admin BOOLEAN DEFAULT 0
+        );
+
+CREATE TABLE IF NOT EXISTS produtos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            restaurante_id INTEGER,
+            nome TEXT NOT NULL,
+            preco REAL NOT NULL,
+            FOREIGN KEY (restaurante_id) REFERENCES restaurantes(id)
+        );
+
+CREATE TABLE IF NOT EXISTS cadastro_cliente (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            email TEXT UNIQUE,
+            senha TEXT,
+            data DATE
+        );
+
+CREATE TABLE IF NOT EXISTS vendas(
+            id_restaurante INTEGER,
+            id_cliente INTEGER,
+            venda_id INTEGER,
+            id_produto INTEGER,
+            nome_produto TEXT,
+            momento_compra DATE,
+            quantidade INTEGER,
+            preco_total REAL,
+            status INTEGER,
+            FOREIGN KEY (id_cliente) REFERENCES cadastro_cliente(id)
+        );
+
+
+-- Inserir dados na tabela pedidos_concluidos
+INSERT INTO pedidos_concluidos (id_pedido, nome_cliente, total_compra, acoes, id_restaurante)
+VALUES
+    (1, 'João Silva', 150, 'Pedido entregue', 2),
+    (2, 'Maria Oliveira', 200, 'Pedido entregue', 3),
+    (3, 'Carlos Souza', 120, 'Pedido entregue', 1);
+
+-- Inserir dados na tabela pedidos_cancelados
+INSERT INTO pedidos_cancelados (id_pedido, nome_cliente, total_compra, acoes, id_restaurante)
+VALUES
+    (1, 'Ana Costa', 100, 'Pedido cancelado', 2),
+    (2, 'Felipe Almeida', 180, 'Pedido cancelado', 3),
+    (3, 'Luana Pereira', 90, 'Pedido cancelado', 1);
+
+-- Inserir dados na tabela restaurantes
+INSERT INTO restaurantes (nome, comissao, email, senha, data, is_admin)
+VALUES
+    ('Restaurante A', 10, 'restaurantea@email.com', 'senha123', '2024-11-01', 1),
+    ('Restaurante B', 15, 'restauranteb@email.com', 'senha456', '2024-11-05', 0),
+    ('Restaurante C', 12, 'restaurantec@email.com', 'senha789', '2024-11-10', 0);
+
+-- Inserir dados na tabela produtos
+INSERT INTO produtos (restaurante_id, nome, preco)
+VALUES
+    (1, 'Pizza calabresa', 45.00),
+    (1, 'Lasanha', 50.00),
+    (2, 'hamburguer', 30.00),
+    (2, 'batata frita', 15.00),
+    (3, 'Sushi', 60.00),
+    (3, 'taco', 40.00);
+
+-- Inserir dados na tabela cadastro_cliente
+INSERT INTO cadastro_cliente (nome, email, senha, data)
+VALUES
+    ('João Silva', 'joao@email.com', 'joao123', '2024-10-01'),
+    ('Maria Oliveira', 'maria@email.com', 'maria456', '2024-10-05'),
+    ('Carlos Souza', 'carlos@email.com', 'carlos789', '2024-10-10');
+
+-- Inserir dados na tabela vendas
+INSERT INTO vendas (id_restaurante, id_cliente, venda_id, id_produto, nome_produto, momento_compra, quantidade, preco_total, status)
+VALUES
+    (1, 1, 101, 1, 'Pizza calabrasa', '2024-11-01', 2, 90.00, 1),
+    (2, 2, 102, 2, 'hamburguer', '2024-11-05', 3, 90.00, 3),
+    (3, 3, 103, 3, 'Sushi', '2024-11-10', 1, 60.00, 3),
+    (1, 2, 104, 2, 'Lasanha', '2024-11-02', 1, 50.00, 1),
+    (2, 3, 105, 3, 'batata frita', '2024-11-06', 4, 60.00, 1),
+    (3, 1, 106, 1, 'Sushi', '2024-11-07', 2, 120.00, 1),
+    (1, 3, 107, 1, 'Pizza calabresa', '2024-11-08', 3, 135.00, 1),
+    (2, 1, 108, 2, 'hmaburguer', '2024-11-09', 2, 60.00, 1),
+    (3, 2, 109, 3, 'taco', '2024-11-10', 1, 40.00, 1),
+    (1, 2, 110, 2, 'Lasanha', '2024-11-11', 2, 100.00, 1),
+    (2, 3, 111, 3, 'batata frita', '2024-11-12', 5, 75.00, 1),
+    (3, 1, 112, 1, 'Sushi', '2024-11-13', 1, 60.00, 1),
+    (1, 3, 113, 2, 'Lasanha', '2024-11-14', 2, 100.00, 1),
+    (1, 1, 114, 1, 'Pizza calabrasa', '2024-11-15', 1, 45.00, 3),
+    (2, 2, 115, 2, 'hamburguer', '2024-11-16', 3, 90.00, 3),
+    (3, 3, 116, 3, 'Sushi', '2024-11-17', 2, 120.00, 3),
+    (1, 2, 117, 2, 'Lasanha', '2024-11-18', 1, 50.00, 3),
+    (2, 3, 118, 3, 'batata frita', '2024-11-19', 4, 60.00, 3),
+    (3, 1, 119, 1, 'Sushi', '2024-11-20', 2, 120.00, 3),
+    (1, 3, 120, 1, 'Pizza calabresa', '2024-11-21', 3, 135.00, 3),
+    (2, 1, 121, 2, 'hmaburguer', '2024-11-22', 2, 60.00, 3),
+    (3, 2, 122, 3, 'taco', '2024-11-23', 1, 40.00, 3),
+    (1, 2, 123, 2, 'Lasanha', '2024-11-24', 2, 100.00, 3),
+    (2, 3, 124, 3, 'batata frita', '2024-11-25', 5, 75.00, 3),
+    (3, 1, 125, 1, 'Sushi', '2024-11-26', 1, 60.00, 3),
+    (1, 3, 126, 2, 'Lasanha', '2024-11-27', 2, 100.00, 3);
+
+
+
+
+
+
+
+
+
+
+
+-- consultas dos dados do restaurate
+SELECT MAX(total_compra) AS maior_compra
+FROM pedidos_concluidos;
+
+
+
+
+SELECT nome_cliente, AVG(total_compra) AS media_gasto
+FROM pedidos_concluidos
+GROUP BY nome_cliente;
+
+
+
+
+
+
+SELECT venda_id, SUM(quantidade) AS total_quantidade_itens
+FROM vendas
+GROUP BY venda_id
+ORDER BY total_quantidade_itens DESC
+LIMIT 1;
+
+
+
+SELECT
+    CASE
+        WHEN status = 0 THEN 'Aceitar Pedido'
+        WHEN status = 1 THEN 'Despachar Pedido'
+        WHEN status = 2 THEN 'Pedido Entregue'
+        WHEN status = 3 THEN 'Pedido Concluído'
+        WHEN status = 10 THEN 'Pedido Cancelado'
+        ELSE 'Status Desconhecido'
+    END AS status_nome,
+    COUNT(*) AS qtd_pedidos
+FROM vendas
+WHERE status IN (0, 1, 2, 3, 10)
+GROUP BY status
+ORDER BY status;
+
+
+
+SELECT
+    strftime('%d/%m/%Y', momento_compra) AS data_compra,
+    COUNT(CASE WHEN strftime('%w', momento_compra) = '1' THEN 1 END) AS segunda_feira,
+    COUNT(CASE WHEN strftime('%w', momento_compra) = '2' THEN 1 END) AS terca_feira,
+    COUNT(CASE WHEN strftime('%w', momento_compra) = '3' THEN 1 END) AS quarta_feira,
+    COUNT(CASE WHEN strftime('%w', momento_compra) = '4' THEN 1 END) AS quinta_feira,
+    COUNT(CASE WHEN strftime('%w', momento_compra) = '5' THEN 1 END) AS sexta_feira,
+    COUNT(CASE WHEN strftime('%w', momento_compra) = '6' THEN 1 END) AS sabado
+FROM vendas
+WHERE status = 3
+GROUP BY data_compra;
+
+
+
+SELECT id_produto, COUNT(*) AS quantidade_pedidos
+FROM vendas
+WHERE status = 3
+GROUP BY id_produto
+ORDER BY quantidade_pedidos DESC
+LIMIT 1;
+
+
+
+-- comissao por venda
+SELECT v.venda_id, v.preco_total, r.comissao
+FROM vendas v
+JOIN restaurantes r ON v.id_restaurante = r.id
+WHERE v.status = 3 AND v.id_restaurante;
+
+
+
+
+
+
+-- consultas do painel do administrador
+
+
+
+
+-- quantidade de restaurantes cadastrados
+
+SELECT COUNT(*) AS total_restaurantes
+FROM restaurantes
+WHERE is_admin = 0;
+
+
+--quantidade de clientes cadastrados
+
+SELECT COUNT(*) AS total_clientes
+FROM cadastro_cliente;
+
+
+
+-- clientes unicos por restaurante
+
+SELECT r.nome AS restaurante, COUNT(DISTINCT v.id_cliente) AS clientes_unicos
+FROM vendas v
+JOIN restaurantes r ON v.id_restaurante = r.id
+WHERE v.status = 3
+GROUP BY v.id_restaurante
+ORDER BY r.nome;
+
+
+
+
+
+-- consultando o ticket medio
+
+SELECT
+    r.nome AS nome_restaurante,
+    v.id_restaurante,
+    SUM(v.preco_total) AS total_vendas,
+    COUNT(*) AS total_pedidos,
+    (SUM(v.preco_total) / COUNT(*)) AS ticket_medio
+FROM
+    vendas v
+JOIN
+    restaurantes r ON v.id_restaurante = r.id
+WHERE
+    v.status = 3
+GROUP BY
+    v.id_restaurante, r.nome;
+
+
+
+
+
+
+-- consulta de pedidos por mes no restaurante
+
+SELECT
+r.nome AS nome_restaurante,
+strftime('%Y-%m', v.momento_compra) AS mes,
+COUNT(*) AS total_pedidos
+FROM
+vendas v
+JOIN
+restaurantes r ON v.id_restaurante = r.id
+WHERE
+v.status = 3
+GROUP BY
+r.nome, strftime('%Y-%m', v.momento_compra)
+ORDER BY
+r.nome, mes;
+
+
+
+
+
+-- cliente distintos por restaurante
+SELECT
+   r.nome AS nome_restaurante,
+   COUNT(DISTINCT v.id_cliente) AS clientes_distintos
+FROM
+   vendas v
+JOIN
+   restaurantes r ON v.id_restaurante = r.id
+WHERE
+   v.status = 3
+GROUP BY
+   r.nome
+ORDER BY
+   clientes_distintos DESC;
+
+
+
+
+
+
