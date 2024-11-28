@@ -2,16 +2,16 @@ CREATE TABLE IF NOT EXISTS pedidos_concluidos (
                     id_pedido INTEGER,
                     nome_cliente TEXT,
                     total_compra INTEGER,
-                    acoes TEXT,
+                    acoes VARCHAR(30),
                     id_restaurante INTEGER
                 );
 
 
 CREATE TABLE IF NOT EXISTS pedidos_cancelados (
                     id_pedido INTEGER PRIMARY KEY,
-                    nome_cliente TEXT,
+                    nome_cliente VARCHAR(50),
                     total_compra INTEGER,
-                    acoes TEXT,
+                    acoes VARCHAR(30),
                     id_restaurante INTEGER
                         );
 
@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS restaurantes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             comissao INTEGER NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            senha TEXT NOT NULL,
+            email VARCHAR(100) NOT NULL UNIQUE,
+            senha VARCHAR (100) NOT NULL,
             data DATE,
             is_admin BOOLEAN DEFAULT 0
         );
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS produtos (
 CREATE TABLE IF NOT EXISTS cadastro_cliente (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
-            email TEXT UNIQUE,
-            senha TEXT,
+            email VARCHAR(100) UNIQUE,
+            senha VARCHAR(100),
             data DATE
         );
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS vendas(
             id_cliente INTEGER,
             venda_id INTEGER,
             id_produto INTEGER,
-            nome_produto TEXT,
+            nome_produto VARCHAR(50),
             momento_compra DATE,
             quantidade INTEGER,
             preco_total REAL,
