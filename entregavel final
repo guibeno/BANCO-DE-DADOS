@@ -73,9 +73,9 @@ VALUES
 -- Inserir dados na tabela restaurantes
 INSERT INTO restaurantes (nome, comissao, email, senha, data, is_admin)
 VALUES
-    ('Restaurante A', 10, 'restaurantea@email.com', 'senha123', '2024-11-01', 1),
-    ('Restaurante B', 15, 'restauranteb@email.com', 'senha456', '2024-11-05', 0),
-    ('Restaurante C', 12, 'restaurantec@email.com', 'senha789', '2024-11-10', 0);
+    ('Refugios', 10, 'refugios@email.com', 'senha123', '2024-11-01', 0),
+    ('bar da esquina', 15, 'bar_da_esquina@email.com', 'senha456', '2024-11-05', 0),
+    ('pizzaria', 12, 'pizzaria@email.com', 'senha789', '2024-11-10', 0);
 
 -- Inserir dados na tabela produtos
 INSERT INTO produtos (restaurante_id, nome, preco)
@@ -135,12 +135,14 @@ VALUES
 
 
 -- consultas dos dados do restaurate
+
+-- maior compra em valor do restaurante
 SELECT MAX(total_compra) AS maior_compra
 FROM pedidos_concluidos;
 
 
 
-
+-- media gasto
 SELECT nome_cliente, AVG(total_compra) AS media_gasto
 FROM pedidos_concluidos
 GROUP BY nome_cliente;
@@ -149,7 +151,7 @@ GROUP BY nome_cliente;
 
 
 
-
+-- maior quantidade de items em um unico pedido
 SELECT venda_id, SUM(quantidade) AS total_quantidade_itens
 FROM vendas
 GROUP BY venda_id
@@ -158,6 +160,8 @@ LIMIT 1;
 
 
 
+
+-- pedidos por status
 SELECT
     CASE
         WHEN status = 0 THEN 'Aceitar Pedido'
@@ -175,6 +179,8 @@ ORDER BY status;
 
 
 
+
+-- pedidos por dias na semana
 SELECT
     strftime('%d/%m/%Y', momento_compra) AS data_compra,
     COUNT(CASE WHEN strftime('%w', momento_compra) = '1' THEN 1 END) AS segunda_feira,
@@ -186,6 +192,7 @@ SELECT
 FROM vendas
 WHERE status = 3
 GROUP BY data_compra;
+
 
 
 
@@ -221,7 +228,7 @@ FROM restaurantes
 WHERE is_admin = 0;
 
 
---quantidade de clientes cadastrados
+-- quantidade de clientes cadastrados
 
 SELECT COUNT(*) AS total_clientes
 FROM cadastro_cliente;
