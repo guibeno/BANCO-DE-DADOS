@@ -155,11 +155,7 @@ INSERT INTO atingimento (id_atingimento, id_meta,id_funcionario, qtd_atingida, d
         (41, 41, 41,90, '2024-11-30', (90/44*1.0)*100, '2024-12-30');
 
 
-DROP TABLE funcionario;
 
-DROP TABLE meta;
-
-DROP TABLE atingimento;
 
 SELECT
     f.nome AS funcionario,
